@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -81,15 +82,64 @@ namespace Dusza_Fogadas.pages
 
         private void btnLetrehoz_Click(object sender, RoutedEventArgs e)
         {
-            //játék megnézevezés ellenőrzése és felküldése
+
+            //játék megnézevezés ellenőrzése és rögzítése
             if (tbNeve.Text != "" && tbSzervezo.Text != "" && alanyok.Count() != 0 && esemenyek.Count() != 0)
             {
-                MessageBox.Show("Sikerült!");
+                List<string> aktivJatekok = GetAktivJatekok();
+
+                if (!aktivJatekok.Contains(tbNeve.Text))
+                {
+                    //feltöltés
+                }
+                else
+                {
+                    MessageBox.Show("Ilyen névvel már létezik játék.");
+                }
             }
             else
             {
                 MessageBox.Show("Töltsd ki az összes mezőt!");
             }
+        }
+
+        static List<string> GetAktivJatekok()
+        {
+            List<string> gameNames = new List<string>();
+            string connectionString = "Server=localhost;Database=dusza-fogadas;Uid=root;Pwd=;";
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+
+                    // Query to get game names where is_closed = 0 (active games)
+                    string query = "SELECT game_name FROM games WHERE is_closed = 0";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string gameName = reader.GetString("game_name");
+                                gameNames.Add(gameName);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}");
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return gameNames;
         }
     }
 }
