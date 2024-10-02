@@ -20,5 +20,30 @@ namespace Dusza_Fogadas
         {
             InitializeComponent();
         }
+
+        private void btnLetrehozas_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLeadas_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLezaras_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLekerdezes_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnKilepes_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
