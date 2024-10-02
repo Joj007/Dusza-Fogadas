@@ -36,10 +36,10 @@ namespace Dusza_Fogadas.pages
                 {
                     Button alany = new Button();
                     alany.Content = tbAlany.Text;
+                    alany.Style = FindResource("ListItem") as Style;
                     alanyok.Add(tbAlany.Text);
                     spAlanyok.Children.Add(alany);
                     alany.Click += btnTorolAlany;
-                    alany.Height = 20;
 
                     // Clear the input field
                     tbAlany.Clear();
@@ -70,11 +70,11 @@ namespace Dusza_Fogadas.pages
                 if (!esemenyek.Contains(tbEsemeny.Text))
                 {
                     Button esemeny = new Button();
+                    esemeny.Style = FindResource("ListItem") as Style;
                     esemeny.Content = tbEsemeny.Text;
                     esemenyek.Add(tbEsemeny.Text);
                     spEsemenyek.Children.Add(esemeny);
                     esemeny.Click += btnTorolEsemeny;
-                    esemeny.Height = 20;
 
                     // Clear the input field
                     tbEsemeny.Clear();

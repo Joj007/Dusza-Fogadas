@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Dusza_Fogadas.pages;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,7 +24,8 @@ namespace Dusza_Fogadas
 
         private void btnLetrehozas_Click(object sender, RoutedEventArgs e)
         {
-
+            UjJatek ujJatek = new UjJatek();
+            ujJatek.Show();
         }
 
         private void btnLeadas_Click(object sender, RoutedEventArgs e)

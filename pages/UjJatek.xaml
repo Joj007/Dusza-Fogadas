@@ -5,57 +5,105 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dusza_Fogadas.pages"
         mc:Ignorable="d"
-        Title="UjJatek" Height="700" Width="600">
+        Title="UjJatek" Height="700" Width="600" WindowStyle="None" WindowState="Maximized">
         <Window.Resources>
+        <Style x:Key = "ListItem" TargetType = "Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontSize" Value="20"/>
 
-            <Style TargetType="Label">
-                <Setter Property="FontSize" Value="22" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-            </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="MinWidth" Value="200" />
-            <Setter Property="Height" Value="30" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Opacity" Value="0.75"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <Style x:Key="List" TargetType="StackPanel">
+            <Setter Property="Background" Value="SandyBrown"/>
+        </Style>
+
+        <Style x:Key="InputField" TargetType="StackPanel">
+            
+        </Style>
+
+        <Style x:Key="InputMezo" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="UploadButton" TargetType="Button">
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
+        <Style x:Key="Label" TargetType="Label">
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="20"/>
         </Style>
 
         </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Label>Ki a szervező? :</Label>
-            <TextBox x:Name="tbSzervezo"></TextBox>
+        <StackPanel Style = "{StaticResource InputField}" Grid.Column="0" Grid.Row="2">
+            <Label Style = "{StaticResource Label}">Ki a szervező? :</Label>
+            <TextBox Style = "{StaticResource InputMezo}" x:Name="tbSzervezo"></TextBox>
         </StackPanel>
+
+        <StackPanel Style = "{StaticResource InputField}" Grid.Column="1" Grid.Row="2">
+            <Label Style = "{StaticResource Label}" Grid.Row="1">Mi a játék megnevezése? :</Label>
+            <TextBox Style = "{StaticResource InputMezo}" x:Name="tbNeve"></TextBox>
+        </StackPanel>
+
+        <StackPanel Style = "{StaticResource InputField}" Grid.Row="3" Grid.Column="0">
+            <Label Style = "{StaticResource Label}" Grid.Row="2">Kik az alanyok? :</Label>
+            <TextBox Style = "{StaticResource InputMezo}" x:Name="tbAlany"></TextBox>
+            <Button Style = "{StaticResource UploadButton}" x:Name="btnFelveszAlany" Click="btnFelveszAlany_Click">Felvesz</Button>
+        </StackPanel>
+
+        <StackPanel Style = "{StaticResource InputField}" Grid.Row="3" Grid.Column="1">
+            <Label Style = "{StaticResource Label}" Grid.Row="3">Mik az események? :</Label>
+            <TextBox Style = "{StaticResource InputMezo}" x:Name="tbEsemeny"></TextBox>
+            <Button Style = "{StaticResource UploadButton}" x:Name="btnFelveszEsemeny" Click="btnFelveszEsemeny_Click">Felvesz</Button>
+        </StackPanel>
+
+
+        <StackPanel Style = "{StaticResource List}" Grid.RowSpan="3" Grid.Column="2" x:Name="spAlanyok"></StackPanel>
+        <StackPanel Style = "{StaticResource List}" Grid.RowSpan="3" Grid.Column="2" Grid.Row="3" x:Name="spEsemenyek"></StackPanel>
         
-        <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Grid.Row="1">Mi a játék megnevezése? :</Label>
-            <TextBox x:Name="tbNeve"></TextBox>
-        </StackPanel>
         
-        <StackPanel Orientation="Horizontal" Grid.Row="2">
-            <Label Grid.Row="2">Kik az alanyok? :</Label>
-            <TextBox x:Name="tbAlany"></TextBox>
-            <Button x:Name="btnFelveszAlany" Click="btnFelveszAlany_Click">Felvesz</Button>
-        </StackPanel>
-        <StackPanel x:Name="spAlanyok" Orientation="Horizontal" Grid.Row="3"></StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="4">
-            <Label Grid.Row="3">Mik az események? :</Label>
-            <TextBox x:Name="tbEsemeny"></TextBox>
-            <Button x:Name="btnFelveszEsemeny" Click="btnFelveszEsemeny_Click">Felvesz</Button>
-        </StackPanel>
-        <StackPanel x:Name="spEsemenyek" Orientation="Horizontal" Grid.Row="5"></StackPanel>
         <Button x:Name="btnMegse" Grid.Row="6" Width="150px" Height="40px" HorizontalAlignment="Left" Margin="10px" Click="btnMegse_Click">Mégse</Button>
-        <Button x:Name="btnLetrehoz" Grid.Row="6" Width="150px" Height="40px" HorizontalAlignment="Right" Margin="10px" Click="btnLetrehoz_Click">Létrehoz</Button>
+        <Button x:Name="btnLetrehoz" Grid.ColumnSpan="3" Grid.Row="6" Width="350px" Height="40px" HorizontalAlignment="Center" Margin="10px" Click="btnLetrehoz_Click">Létrehoz</Button>
     </Grid>
 </Window>
