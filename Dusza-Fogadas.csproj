@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Resource Include="Images\bg.jfif" />
+    <PackageReference Include="MySql.Data" Version="9.0.0" />
   </ItemGroup>
 
 </Project>
