@@ -82,15 +82,76 @@ namespace Dusza_Fogadas.pages
 
         private void btnLetrehoz_Click(object sender, RoutedEventArgs e)
         {
-
-            //játék megnézevezés ellenőrzése és rögzítése
+            // Validate the inputs
             if (tbNeve.Text != "" && tbSzervezo.Text != "" && alanyok.Count() != 0 && esemenyek.Count() != 0)
             {
                 List<string> aktivJatekok = GetAktivJatekok();
 
                 if (!aktivJatekok.Contains(tbNeve.Text))
                 {
-                    //feltöltés
+                    string connectionString = "Server=localhost;Database=dusza-fogadas;Uid=root;Pwd=;";
+
+                    using (MySqlConnection conn = new MySqlConnection(connectionString))
+                    {
+                        try
+                        {
+                            conn.Open();
+
+                            // 1. Insert the game into the `games` table
+                            string insertGameQuery = "INSERT INTO games (organizer_id, game_name, num_subjects, num_events, is_closed, start_date, close_date) " +
+                                                      "VALUES ((SELECT id FROM users WHERE name = @organizerName), @gameName, @numSubjects, @numEvents, 0, CURDATE(), NULL);";
+
+
+                            using (MySqlCommand cmd = new MySqlCommand(insertGameQuery, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@organizerName", tbSzervezo.Text);
+                                cmd.Parameters.AddWithValue("@gameName", tbNeve.Text);
+                                cmd.Parameters.AddWithValue("@numSubjects", alanyok.Count);
+                                cmd.Parameters.AddWithValue("@numEvents", esemenyek.Count);
+
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            // 2. Get the last inserted game ID
+                            int gameId;
+                            using (MySqlCommand cmd = new MySqlCommand("SELECT LAST_INSERT_ID();", conn))
+                            {
+                                gameId = Convert.ToInt32(cmd.ExecuteScalar());
+                            }
+
+                            // 3. Insert subjects into the `subjects` table
+                            foreach (string subject in alanyok)
+                            {
+                                string insertSubjectQuery = "INSERT INTO subjects (game_id, name) VALUES (@gameId, @subjectName);";
+
+                                using (MySqlCommand cmd = new MySqlCommand(insertSubjectQuery, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@gameId", gameId);
+                                    cmd.Parameters.AddWithValue("@subjectName", subject);
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+
+                            // 4. Insert events into the `events` table
+                            foreach (string eventName in esemenyek)
+                            {
+                                string insertEventQuery = "INSERT INTO events (game_id, subject_id, description) VALUES (@gameId, NULL, @eventDescription);";
+
+                                using (MySqlCommand cmd = new MySqlCommand(insertEventQuery, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@gameId", gameId);
+                                    cmd.Parameters.AddWithValue("@eventDescription", eventName);
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+
+                            MessageBox.Show("Játék sikeresen létrehozva!");
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Hiba történt: {ex.Message}");
+                        }
+                    }
                 }
                 else
                 {
@@ -102,6 +163,7 @@ namespace Dusza_Fogadas.pages
                 MessageBox.Show("Töltsd ki az összes mezőt!");
             }
         }
+
 
         static List<string> GetAktivJatekok()
         {
