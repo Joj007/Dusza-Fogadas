@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Dusza_Fogadas.pages;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,5 +21,46 @@ namespace Dusza_Fogadas
         {
             InitializeComponent();
         }
+<<<<<<< Updated upstream
+=======
+
+        private void btnLetrehozas_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void btnLeadas_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void btnLezaras_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void btnLekerdezes_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnKilepes_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Bejelentkezes_Click(object sender, RoutedEventArgs e)
+        {
+            Bejelentkezes wasd = new Bejelentkezes();
+            bool? result = wasd.ShowDialog();
+            if (result == true)
+            {
+               
+            }
+
+        }
+>>>>>>> Stashed changes
     }
 }
