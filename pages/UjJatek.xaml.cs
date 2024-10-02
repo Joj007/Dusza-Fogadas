@@ -29,14 +29,25 @@ namespace Dusza_Fogadas.pages
 
         private void btnFelveszAlany_Click(object sender, RoutedEventArgs e)
         {
-            if (tbAlany.Text != "")
+            if (!string.IsNullOrWhiteSpace(tbAlany.Text))
             {
-                Button alany = new Button();
-                alany.Content = tbAlany.Text;
-                alanyok.Add(tbAlany.Text);
-                spAlanyok.Children.Add(alany);
-                alany.Click += btnTorolAlany;
-                alany.Height = 20;
+                // Check if the subject already exists
+                if (!alanyok.Contains(tbAlany.Text))
+                {
+                    Button alany = new Button();
+                    alany.Content = tbAlany.Text;
+                    alanyok.Add(tbAlany.Text);
+                    spAlanyok.Children.Add(alany);
+                    alany.Click += btnTorolAlany;
+                    alany.Height = 20;
+
+                    // Clear the input field
+                    tbAlany.Clear();
+                }
+                else
+                {
+                    MessageBox.Show("Ez az alany már hozzá lett adva!");
+                }
             }
             else
             {
@@ -53,14 +64,25 @@ namespace Dusza_Fogadas.pages
 
         private void btnFelveszEsemeny_Click(object sender, RoutedEventArgs e)
         {
-            if (tbEsemeny.Text != "")
+            if (!string.IsNullOrWhiteSpace(tbEsemeny.Text))
             {
-                Button esemeny = new Button();
-                esemeny.Content = tbEsemeny.Text;
-                esemenyek.Add(tbEsemeny.Text);
-                spEsemenyek.Children.Add(esemeny);
-                esemeny.Click += btnTorolEsemeny;
-                esemeny.Height = 20;
+                // Check if the event already exists
+                if (!esemenyek.Contains(tbEsemeny.Text))
+                {
+                    Button esemeny = new Button();
+                    esemeny.Content = tbEsemeny.Text;
+                    esemenyek.Add(tbEsemeny.Text);
+                    spEsemenyek.Children.Add(esemeny);
+                    esemeny.Click += btnTorolEsemeny;
+                    esemeny.Height = 20;
+
+                    // Clear the input field
+                    tbEsemeny.Clear();
+                }
+                else
+                {
+                    MessageBox.Show("Ez az esemény már hozzá lett adva!");
+                }
             }
             else
             {
