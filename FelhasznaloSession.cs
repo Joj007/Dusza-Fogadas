@@ -44,16 +44,20 @@ public class UserSession
 
     public decimal? GetUserBalance(string userName)
     {
-        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        if (GetUserRole(userName) == "fogadó")
         {
-            conn.Open();
-            string query = "SELECT balance FROM users WHERE name = @userName";
-            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                cmd.Parameters.AddWithValue("@userName", userName);
-                object result = cmd.ExecuteScalar();
-                return result != null ? (decimal?)Convert.ToDecimal(result) : null;
+                conn.Open();
+                string query = "SELECT balance FROM users WHERE name = @userName";
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@userName", userName);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? (decimal?)Convert.ToDecimal(result) : null;
+                }
             }
         }
+        return -1;
     }
 }

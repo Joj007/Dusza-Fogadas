@@ -21,9 +21,6 @@ namespace Dusza_Fogadas
         {
             InitializeComponent();
         }
-<<<<<<< Updated upstream
-=======
-
         private void btnLetrehozas_Click(object sender, RoutedEventArgs e)
         {
         }
@@ -61,6 +58,5 @@ namespace Dusza_Fogadas
             }
 
         }
->>>>>>> Stashed changes
     }
 }

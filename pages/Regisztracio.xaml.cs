@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Dusza_Fogadas.pages
 {
@@ -12,7 +13,7 @@ namespace Dusza_Fogadas.pages
         public Regisztracio()
         {
             InitializeComponent();
-            cbSzerepkor.SelectedIndex = 1; // Set default selected role
+            cbSzerepkor.SelectedItem = cbSzerepkor.Items.Cast<ComboBoxItem>().FirstOrDefault(item => ((ComboBoxItem)item).Content.ToString() == "fogadó");
         }
 
         private void btnRegisztral_Click(object sender, RoutedEventArgs e)
@@ -54,7 +55,7 @@ namespace Dusza_Fogadas.pages
             }
 
             // Determine the balance based on the role
-            string selectedRole = cbSzerepkor.SelectedItem.ToString();
+            string selectedRole = ((ComboBoxItem)cbSzerepkor.SelectedItem).Content.ToString();
             object initialBalance = selectedRole == "fogadó" ? (object)100 : DBNull.Value;
 
             // Proceed with registration

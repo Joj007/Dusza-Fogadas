@@ -4,8 +4,8 @@
         Title="Bejelentkezés" Height="300" Width="250">
     <Grid>
         <StackPanel Margin="20">
-            <Label>Email:</Label>
-            <TextBox x:Name="tbEmail" />
+            <Label>Felhasznónév:</Label>
+            <TextBox x:Name="tbNeve" />
 
             <Label>Jelszó:</Label>
             <PasswordBox x:Name="pbJelszo" />
