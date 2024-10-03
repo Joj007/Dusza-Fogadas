@@ -23,6 +23,8 @@ namespace Dusza_Fogadas
         }
         private void btnLetrehozas_Click(object sender, RoutedEventArgs e)
         {
+            UjJatek ujJatek = new UjJatek();
+            ujJatek.Show();
         }
 
         private void btnLeadas_Click(object sender, RoutedEventArgs e)

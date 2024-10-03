@@ -25,23 +25,41 @@ namespace Dusza_Fogadas.pages
         public UjJatek()
         {
             InitializeComponent();
+
+
+            Label alanyCim = new();
+            alanyCim.Content = "Alanyok";
+            spAlanyok.Children.Add(alanyCim);
+            alanyCim.Style = FindResource("ListTitle") as Style;
+            Separator szeparator = new Separator();
+            spAlanyok.Children.Add(szeparator);
+
+            Label esemenyCim = new();
+            esemenyCim.Content = "Események";
+            spEsemenyek.Children.Add(esemenyCim);
+            esemenyCim.Style = FindResource("ListTitle") as Style;
+            Separator szeparator2 = new Separator();
+            spEsemenyek.Children.Add(szeparator2);
         }
 
         private void btnFelveszAlany_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(tbAlany.Text))
             {
-         
+                // Check if the subject already exists
                 if (!alanyok.Contains(tbAlany.Text))
                 {
                     Button alany = new Button();
                     alany.Content = tbAlany.Text;
+                    alany.Style = FindResource("ListItem") as Style;
                     alanyok.Add(tbAlany.Text);
                     spAlanyok.Children.Add(alany);
                     alany.Click += btnTorolAlany;
-                    alany.Height = 20;
 
-                 
+                    Separator szeparator = new Separator();
+                    spAlanyok.Children.Add(szeparator);
+
+                    // Clear the input field
                     tbAlany.Clear();
                 }
                 else
@@ -60,23 +78,29 @@ namespace Dusza_Fogadas.pages
             Button alany = sender as Button;
             alanyok.Remove(alany.Content.ToString());
             spAlanyok.Children.Remove(alany);
+
+            int index = spAlanyok.Children.IndexOf(alany);
+            spAlanyok.Children.RemoveAt(index);
+            spAlanyok.Children.RemoveAt(index);
         }
 
         private void btnFelveszEsemeny_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(tbEsemeny.Text))
             {
-               
+                // Check if the event already exists
                 if (!esemenyek.Contains(tbEsemeny.Text))
                 {
                     Button esemeny = new Button();
+                    esemeny.Style = FindResource("ListItem") as Style;
                     esemeny.Content = tbEsemeny.Text;
                     esemenyek.Add(tbEsemeny.Text);
                     spEsemenyek.Children.Add(esemeny);
                     esemeny.Click += btnTorolEsemeny;
-                    esemeny.Height = 20;
+                    Separator szeparator2 = new Separator();
+                    spEsemenyek.Children.Add(szeparator2);
 
-                    
+                    // Clear the input field
                     tbEsemeny.Clear();
                 }
                 else
@@ -94,7 +118,11 @@ namespace Dusza_Fogadas.pages
         {
             Button esemeny = sender as Button;
             esemenyek.Remove(esemeny.Content.ToString());
-            spEsemenyek.Children.Remove(esemeny);
+
+
+            int index = spEsemenyek.Children.IndexOf(esemeny);
+            spEsemenyek.Children.RemoveAt(index);
+            spEsemenyek.Children.RemoveAt(index);
         }
 
         private void btnMegse_Click(object sender, RoutedEventArgs e)
@@ -104,7 +132,7 @@ namespace Dusza_Fogadas.pages
 
         private void btnLetrehoz_Click(object sender, RoutedEventArgs e)
         {
-           
+            // Validate the inputs
             if (tbNeve.Text != "" && tbSzervezo.Text != "" && alanyok.Count() != 0 && esemenyek.Count() != 0)
             {
                 List<string> aktivJatekok = GetAktivJatekok();
@@ -119,7 +147,7 @@ namespace Dusza_Fogadas.pages
                         {
                             conn.Open();
 
-                            
+                            // 1. Insert the game into the `games` table
                             string insertGameQuery = "INSERT INTO games (organizer_id, game_name, num_subjects, num_events, is_closed, start_date, close_date) " +
                                                       "VALUES ((SELECT id FROM users WHERE name = @organizerName), @gameName, @numSubjects, @numEvents, 0, CURDATE(), NULL);";
 
@@ -134,14 +162,14 @@ namespace Dusza_Fogadas.pages
                                 cmd.ExecuteNonQuery();
                             }
 
-                           
+                            // 2. Get the last inserted game ID
                             int gameId;
                             using (MySqlCommand cmd = new MySqlCommand("SELECT LAST_INSERT_ID();", conn))
                             {
                                 gameId = Convert.ToInt32(cmd.ExecuteScalar());
                             }
 
-                           
+                            // 3. Insert subjects into the `subjects` table
                             foreach (string subject in alanyok)
                             {
                                 string insertSubjectQuery = "INSERT INTO subjects (game_id, name) VALUES (@gameId, @subjectName);";
@@ -154,7 +182,7 @@ namespace Dusza_Fogadas.pages
                                 }
                             }
 
-                            
+                            // 4. Insert events into the `events` table
                             foreach (string eventName in esemenyek)
                             {
                                 string insertEventQuery = "INSERT INTO events (game_id, subject_id, description) VALUES (@gameId, NULL, @eventDescription);";
@@ -198,7 +226,7 @@ namespace Dusza_Fogadas.pages
                 {
                     conn.Open();
 
-                    
+                    // Query to get game names where is_closed = 0 (active games)
                     string query = "SELECT game_name FROM games WHERE is_closed = 0";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
