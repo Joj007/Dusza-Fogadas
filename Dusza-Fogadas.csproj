@@ -10,6 +10,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\bg.jfif" />
+    <None Remove="Images\bgBlack.jpg" />
+    <None Remove="Images\bgBlack2.jpg" />
+    <None Remove="Images\casinoBG1.jpg" />
+    <None Remove="Images\paper.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\bg.jfif" />
+    <Resource Include="Images\bgBlack.jpg" />
+    <Resource Include="Images\bgBlack2.jpg" />
+    <Resource Include="Images\casinoBG1.jpg" />
+    <Resource Include="Images\paper.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MySql.Data" Version="9.0.0" />
   </ItemGroup>
 

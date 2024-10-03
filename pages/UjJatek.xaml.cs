@@ -50,7 +50,7 @@ namespace Dusza_Fogadas.pages
                 if (!alanyok.Contains(tbAlany.Text))
                 {
                     Button alany = new Button();
-                    alany.Content = tbAlany.Text;
+                    alany.Content = "  " + tbAlany.Text;
                     alany.Style = FindResource("ListItem") as Style;
                     alanyok.Add(tbAlany.Text);
                     spAlanyok.Children.Add(alany);
@@ -77,7 +77,6 @@ namespace Dusza_Fogadas.pages
         {
             Button alany = sender as Button;
             alanyok.Remove(alany.Content.ToString());
-            spAlanyok.Children.Remove(alany);
 
             int index = spAlanyok.Children.IndexOf(alany);
             spAlanyok.Children.RemoveAt(index);
@@ -93,7 +92,7 @@ namespace Dusza_Fogadas.pages
                 {
                     Button esemeny = new Button();
                     esemeny.Style = FindResource("ListItem") as Style;
-                    esemeny.Content = tbEsemeny.Text;
+                    esemeny.Content = "  " + tbEsemeny.Text;
                     esemenyek.Add(tbEsemeny.Text);
                     spEsemenyek.Children.Add(esemeny);
                     esemeny.Click += btnTorolEsemeny;
