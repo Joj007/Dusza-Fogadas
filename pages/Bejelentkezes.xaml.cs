@@ -33,8 +33,6 @@ namespace Dusza_Fogadas.pages
                             {
                                 if (reader.Read())
                                 {
-                                    MessageBox.Show("Sikeres bejelentkezés!");
-
                                     string userName = tbNeve.Text;
 
                                     UserSession.Instance.UserName = userName;
@@ -47,6 +45,7 @@ namespace Dusza_Fogadas.pages
                                     DialogResult = true;
                                     Close();
                                 }
+
                                 else
                                 {
                                     MessageBox.Show("Hibás név vagy jelszó!");
