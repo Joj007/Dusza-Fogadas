@@ -11,6 +11,7 @@
             <Setter Property="Height" Value="30"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="Lucida Console"/>
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -59,6 +60,12 @@
             <Setter Property="FontSize" Value="20"/>
         </Style>
 
+        <Style x:Key="ListTitle" TargetType="Label">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
         </Window.Resources>
 
     <Grid>
@@ -98,11 +105,13 @@
             <Button Style = "{StaticResource UploadButton}" x:Name="btnFelveszEsemeny" Click="btnFelveszEsemeny_Click">Felvesz</Button>
         </StackPanel>
 
+        <ScrollViewer Grid.RowSpan="3" Grid.Column="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel Style = "{StaticResource List}" Grid.RowSpan="3" Grid.Column="2" x:Name="spAlanyok"></StackPanel>
+        </ScrollViewer>
+        <ScrollViewer Grid.RowSpan="3" Grid.Column="2" Grid.Row="3" VerticalScrollBarVisibility="Auto">
+            <StackPanel Style = "{StaticResource List}" Grid.RowSpan="3" Grid.Column="2" Grid.Row="3" x:Name="spEsemenyek"></StackPanel>
+        </ScrollViewer>
 
-        <StackPanel Style = "{StaticResource List}" Grid.RowSpan="3" Grid.Column="2" x:Name="spAlanyok"></StackPanel>
-        <StackPanel Style = "{StaticResource List}" Grid.RowSpan="3" Grid.Column="2" Grid.Row="3" x:Name="spEsemenyek"></StackPanel>
-        
-        
         <Button x:Name="btnMegse" Grid.Row="6" Width="150px" Height="40px" HorizontalAlignment="Left" Margin="10px" Click="btnMegse_Click">Mégse</Button>
         <Button x:Name="btnLetrehoz" Grid.ColumnSpan="3" Grid.Row="6" Width="350px" Height="40px" HorizontalAlignment="Center" Margin="10px" Click="btnLetrehoz_Click">Létrehoz</Button>
     </Grid>

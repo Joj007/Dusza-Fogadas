@@ -25,6 +25,21 @@ namespace Dusza_Fogadas.pages
         public UjJatek()
         {
             InitializeComponent();
+
+
+            Label alanyCim = new();
+            alanyCim.Content = "Alanyok";
+            spAlanyok.Children.Add(alanyCim);
+            alanyCim.Style = FindResource("ListTitle") as Style;
+            Separator szeparator = new Separator();
+            spAlanyok.Children.Add(szeparator);
+
+            Label esemenyCim = new();
+            esemenyCim.Content = "Események";
+            spEsemenyek.Children.Add(esemenyCim);
+            esemenyCim.Style = FindResource("ListTitle") as Style;
+            Separator szeparator2 = new Separator();
+            spEsemenyek.Children.Add(szeparator2);
         }
 
         private void btnFelveszAlany_Click(object sender, RoutedEventArgs e)
@@ -40,6 +55,9 @@ namespace Dusza_Fogadas.pages
                     alanyok.Add(tbAlany.Text);
                     spAlanyok.Children.Add(alany);
                     alany.Click += btnTorolAlany;
+
+                    Separator szeparator = new Separator();
+                    spAlanyok.Children.Add(szeparator);
 
                     // Clear the input field
                     tbAlany.Clear();
@@ -60,6 +78,10 @@ namespace Dusza_Fogadas.pages
             Button alany = sender as Button;
             alanyok.Remove(alany.Content.ToString());
             spAlanyok.Children.Remove(alany);
+
+            int index = spAlanyok.Children.IndexOf(alany);
+            spAlanyok.Children.RemoveAt(index);
+            spAlanyok.Children.RemoveAt(index);
         }
 
         private void btnFelveszEsemeny_Click(object sender, RoutedEventArgs e)
@@ -75,6 +97,8 @@ namespace Dusza_Fogadas.pages
                     esemenyek.Add(tbEsemeny.Text);
                     spEsemenyek.Children.Add(esemeny);
                     esemeny.Click += btnTorolEsemeny;
+                    Separator szeparator2 = new Separator();
+                    spEsemenyek.Children.Add(szeparator2);
 
                     // Clear the input field
                     tbEsemeny.Clear();
@@ -94,7 +118,11 @@ namespace Dusza_Fogadas.pages
         {
             Button esemeny = sender as Button;
             esemenyek.Remove(esemeny.Content.ToString());
-            spEsemenyek.Children.Remove(esemeny);
+
+
+            int index = spEsemenyek.Children.IndexOf(esemeny);
+            spEsemenyek.Children.RemoveAt(index);
+            spEsemenyek.Children.RemoveAt(index);
         }
 
         private void btnMegse_Click(object sender, RoutedEventArgs e)
