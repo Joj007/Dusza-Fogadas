@@ -1,4 +1,4 @@
-﻿using Dusza_Fogadas.pages;
+using Dusza_Fogadas.pages;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
