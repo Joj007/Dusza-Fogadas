@@ -5,6 +5,7 @@ public class UserSession
     private static UserSession _instance;
     public static UserSession Instance => _instance ??= new UserSession();
 
+    public string Id { get; set; }
     public string UserName { get; set; }
     public string Email { get; set; }
     public string Role { get; set; }
@@ -21,6 +22,21 @@ public class UserSession
             using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@userName", userName);
+                object result = cmd.ExecuteScalar();
+                return result != null ? result.ToString() : null;
+            }
+        }
+    }
+
+    public string GetId(string userName)
+    {
+        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        {
+            conn.Open();
+            string query = "SELECT id FROM users WHERE id = @id";
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@id", userName);
                 object result = cmd.ExecuteScalar();
                 return result != null ? result.ToString() : null;
             }

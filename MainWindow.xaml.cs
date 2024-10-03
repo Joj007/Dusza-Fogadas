@@ -29,6 +29,8 @@ namespace Dusza_Fogadas
 
         private void btnLeadas_Click(object sender, RoutedEventArgs e)
         {
+            FogadasWindow asd = new FogadasWindow();
+            asd.Show();
         }
 
         private void btnLezaras_Click(object sender, RoutedEventArgs e)
