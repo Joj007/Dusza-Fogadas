@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace Dusza_Fogadas.pages
         {
             if (!string.IsNullOrWhiteSpace(tbAlany.Text))
             {
-                // Check if the subject already exists
+         
                 if (!alanyok.Contains(tbAlany.Text))
                 {
                     Button alany = new Button();
@@ -41,7 +41,7 @@ namespace Dusza_Fogadas.pages
                     alany.Click += btnTorolAlany;
                     alany.Height = 20;
 
-                    // Clear the input field
+                 
                     tbAlany.Clear();
                 }
                 else
@@ -66,7 +66,7 @@ namespace Dusza_Fogadas.pages
         {
             if (!string.IsNullOrWhiteSpace(tbEsemeny.Text))
             {
-                // Check if the event already exists
+               
                 if (!esemenyek.Contains(tbEsemeny.Text))
                 {
                     Button esemeny = new Button();
@@ -76,7 +76,7 @@ namespace Dusza_Fogadas.pages
                     esemeny.Click += btnTorolEsemeny;
                     esemeny.Height = 20;
 
-                    // Clear the input field
+                    
                     tbEsemeny.Clear();
                 }
                 else
@@ -104,7 +104,7 @@ namespace Dusza_Fogadas.pages
 
         private void btnLetrehoz_Click(object sender, RoutedEventArgs e)
         {
-            // Validate the inputs
+           
             if (tbNeve.Text != "" && tbSzervezo.Text != "" && alanyok.Count() != 0 && esemenyek.Count() != 0)
             {
                 List<string> aktivJatekok = GetAktivJatekok();
@@ -119,7 +119,7 @@ namespace Dusza_Fogadas.pages
                         {
                             conn.Open();
 
-                            // 1. Insert the game into the `games` table
+                            
                             string insertGameQuery = "INSERT INTO games (organizer_id, game_name, num_subjects, num_events, is_closed, start_date, close_date) " +
                                                       "VALUES ((SELECT id FROM users WHERE name = @organizerName), @gameName, @numSubjects, @numEvents, 0, CURDATE(), NULL);";
 
@@ -134,14 +134,14 @@ namespace Dusza_Fogadas.pages
                                 cmd.ExecuteNonQuery();
                             }
 
-                            // 2. Get the last inserted game ID
+                           
                             int gameId;
                             using (MySqlCommand cmd = new MySqlCommand("SELECT LAST_INSERT_ID();", conn))
                             {
                                 gameId = Convert.ToInt32(cmd.ExecuteScalar());
                             }
 
-                            // 3. Insert subjects into the `subjects` table
+                           
                             foreach (string subject in alanyok)
                             {
                                 string insertSubjectQuery = "INSERT INTO subjects (game_id, name) VALUES (@gameId, @subjectName);";
@@ -154,7 +154,7 @@ namespace Dusza_Fogadas.pages
                                 }
                             }
 
-                            // 4. Insert events into the `events` table
+                            
                             foreach (string eventName in esemenyek)
                             {
                                 string insertEventQuery = "INSERT INTO events (game_id, subject_id, description) VALUES (@gameId, NULL, @eventDescription);";
@@ -198,7 +198,7 @@ namespace Dusza_Fogadas.pages
                 {
                     conn.Open();
 
-                    // Query to get game names where is_closed = 0 (active games)
+                    
                     string query = "SELECT game_name FROM games WHERE is_closed = 0";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))

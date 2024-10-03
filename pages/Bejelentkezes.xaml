@@ -1,0 +1,18 @@
+﻿<Window x:Class="Dusza_Fogadas.pages.Bejelentkezes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Bejelentkezés" Height="300" Width="250">
+    <Grid>
+        <StackPanel Margin="20">
+            <Label>Felhasznónév:</Label>
+            <TextBox x:Name="tbNeve" />
+
+            <Label>Jelszó:</Label>
+            <PasswordBox x:Name="pbJelszo" />
+
+            <Button Content="Bejelentkezés" Click="btnBejelentkezik_Click" Margin="0,10,0,10" />
+            <Label HorizontalAlignment="Center">Nincs fiókod? Regisztrálj ingyen!</Label>
+            <Button Content="Regisztráció" Margin="0,5,0,0" Click="Button_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
