@@ -13,3 +13,4 @@
 
 ## Admin
 -
+TODO UjJatek organiserID
