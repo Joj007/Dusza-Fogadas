@@ -6,7 +6,6 @@ public class Game
     public string GameName { get; set; }
     public DateTime StartDate { get; set; }
 
-    // ObservableCollections for subjects and events
     public ObservableCollection<Subject> Subjects { get; set; } = new ObservableCollection<Subject>();
     public ObservableCollection<Event> Events { get; set; } = new ObservableCollection<Event>();
 }

@@ -46,7 +46,6 @@ CREATE TABLE `bets` (
 CREATE TABLE `events` (
   `id` int(11) NOT NULL,
   `game_id` int(11) DEFAULT NULL,
-  `subject_id` int(11) DEFAULT NULL,
   `description` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
@@ -64,7 +63,7 @@ CREATE TABLE `games` (
   `num_events` int(11) NOT NULL,
   `is_closed` tinyint(1) DEFAULT 0,
   `start_date` date NOT NULL,
-  `close_date` date NOT NULL
+  `close_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 -- --------------------------------------------------------
@@ -128,8 +127,7 @@ ALTER TABLE `bets`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `game_id` (`game_id`),
-  ADD KEY `subject_id` (`subject_id`);
+  ADD KEY `game_id` (`game_id`);
 
 --
 -- A tábla indexei `games`
@@ -219,8 +217,7 @@ ALTER TABLE `bets`
 -- Megkötések a táblához `events`
 --
 ALTER TABLE `events`
-  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`),
-  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`);
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`);
 
 --
 -- Megkötések a táblához `games`
