@@ -3,6 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Bejelentkezés" Height="300" Width="250">
     <Grid>
+        <Window.Resources>
+            
+        </Window.Resources>
+
         <StackPanel Margin="20">
             <Label>Felhasznónév:</Label>
             <TextBox x:Name="tbNeve" />

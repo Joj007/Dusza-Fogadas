@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -10,17 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\bg.jfif" />
-    <None Remove="Images\paper.png" />
+    <Resource Include="Images\bg.jfif" />
+    <Resource Include="Images\bg.jpg" />
+    <Resource Include="Images\bgBee.png" />
+    <Resource Include="Images\bgBlack.jpg" />
+    <Resource Include="Images\bgBlack2.jpg" />
+    <Resource Include="Images\casinoBG1.jpg" />
+    <Resource Include="Images\paper.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="9.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\bg.jfif" />
-    <Resource Include="Images\paper.png" />
   </ItemGroup>
 
 </Project>
