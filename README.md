@@ -18,4 +18,5 @@
 
 
 
-TODO UjJatek organiserID
+TODO Lezárás rögzítés gomb
+     adatbázis result új szorzó osztó
