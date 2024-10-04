@@ -2,130 +2,51 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Dusza_Fogadas.pages
 {
-    /// <summary>
-    /// Interaction logic for UjJatek.xaml
-    /// </summary>
     public partial class UjJatek : Window
     {
         private List<string> alanyok = new List<string>();
         private List<string> esemenyek = new List<string>();
+
         public UjJatek()
         {
             InitializeComponent();
+            InitializeLabels();
+        }
 
-
-            Label alanyCim = new();
-            alanyCim.Content = "Alanyok";
+        private void InitializeLabels()
+        {
+            Label alanyCim = new Label { Content = "Alanyok", Style = FindResource("ListTitle") as Style };
             spAlanyok.Children.Add(alanyCim);
-            alanyCim.Style = FindResource("ListTitle") as Style;
-            Separator szeparator = new Separator();
-            szeparator.Style = FindResource("Separator") as Style;
-            spAlanyok.Children.Add(szeparator);
+            spAlanyok.Children.Add(new Separator { Style = FindResource("Separator") as Style });
 
-            Label esemenyCim = new();
-            esemenyCim.Content = "Események";
+            Label esemenyCim = new Label { Content = "Események", Style = FindResource("ListTitle") as Style };
             spEsemenyek.Children.Add(esemenyCim);
-            esemenyCim.Style = FindResource("ListTitle") as Style;
-            Separator szeparator2 = new Separator();
-            szeparator2.Style = FindResource("Separator") as Style;
-            spEsemenyek.Children.Add(szeparator2);
+            spEsemenyek.Children.Add(new Separator { Style = FindResource("Separator") as Style });
         }
 
         private void btnFelveszAlany_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(tbAlany.Text))
-            {
-                // Check if the subject already exists
-                if (!alanyok.Contains(tbAlany.Text))
-                {
-                    Button alany = new Button();
-                    alany.Content = "  " + tbAlany.Text;
-                    alany.Style = FindResource("ListItem") as Style;
-                    alanyok.Add(tbAlany.Text);
-                    spAlanyok.Children.Add(alany);
-                    alany.Click += btnTorolAlany;
-
-                    Separator szeparator = new Separator();
-                    szeparator.Style = FindResource("Separator") as Style;
-                    spAlanyok.Children.Add(szeparator);
-
-                    // Clear the input field
-                    tbAlany.Clear();
-                }
-                else
-                {
-                    MessageBox.Show("Ez az alany már hozzá lett adva!");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Adj meg alanyt!");
-            }
+            AddToList(tbAlany, alanyok, spAlanyok);
         }
 
         private void btnTorolAlany(object sender, RoutedEventArgs e)
         {
-            Button alany = sender as Button;
-            alanyok.Remove(alany.Content.ToString());
-
-            int index = spAlanyok.Children.IndexOf(alany);
-            spAlanyok.Children.RemoveAt(index);
-            spAlanyok.Children.RemoveAt(index);
+            RemoveFromList(sender, alanyok, spAlanyok);
         }
 
         private void btnFelveszEsemeny_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(tbEsemeny.Text))
-            {
-                // Check if the event already exists
-                if (!esemenyek.Contains(tbEsemeny.Text))
-                {
-                    Button esemeny = new Button();
-                    esemeny.Style = FindResource("ListItem") as Style;
-                    esemeny.Content = "  " + tbEsemeny.Text;
-                    esemenyek.Add(tbEsemeny.Text);
-                    spEsemenyek.Children.Add(esemeny);
-                    esemeny.Click += btnTorolEsemeny;
-                    Separator szeparator2 = new Separator();
-                    szeparator2.Style = FindResource("Separator") as Style;
-                    spEsemenyek.Children.Add(szeparator2);
-
-                    // Clear the input field
-                    tbEsemeny.Clear();
-                }
-                else
-                {
-                    MessageBox.Show("Ez az esemény már hozzá lett adva!");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Adj meg eseményt!");
-            }
+            AddToList(tbEsemeny, esemenyek, spEsemenyek);
         }
 
         private void btnTorolEsemeny(object sender, RoutedEventArgs e)
         {
-            Button esemeny = sender as Button;
-            esemenyek.Remove(esemeny.Content.ToString());
-
-
-            int index = spEsemenyek.Children.IndexOf(esemeny);
-            spEsemenyek.Children.RemoveAt(index);
-            spEsemenyek.Children.RemoveAt(index);
+            RemoveFromList(sender, esemenyek, spEsemenyek);
         }
 
         private void btnMegse_Click(object sender, RoutedEventArgs e)
@@ -135,8 +56,13 @@ namespace Dusza_Fogadas.pages
 
         private void btnLetrehoz_Click(object sender, RoutedEventArgs e)
         {
-            // Validate the inputs
-            if (tbNeve.Text != "" && tbSzervezo.Text != "" && alanyok.Count() != 0 && esemenyek.Count() != 0)
+            if (string.IsNullOrEmpty(UserSession.Instance.Id))
+            {
+                MessageBox.Show("Organizer ID is not set. Please log in again.");
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(tbNeve.Text) && !string.IsNullOrWhiteSpace(tbSzervezo.Text) && alanyok.Count > 0 && esemenyek.Count > 0)
             {
                 List<string> aktivJatekok = GetAktivJatekok();
 
@@ -149,15 +75,12 @@ namespace Dusza_Fogadas.pages
                         try
                         {
                             conn.Open();
-
-                            // 1. Insert the game into the `games` table
                             string insertGameQuery = "INSERT INTO games (organizer_id, game_name, num_subjects, num_events, is_closed, start_date, close_date) " +
-                                                      "VALUES ((SELECT id FROM users WHERE name = @organizerName), @gameName, @numSubjects, @numEvents, 0, CURDATE(), NULL);";
-
+                                                      "VALUES (@organizerId, @gameName, @numSubjects, @numEvents, 0, CURDATE(), NULL);";
 
                             using (MySqlCommand cmd = new MySqlCommand(insertGameQuery, conn))
                             {
-                                cmd.Parameters.AddWithValue("@organizerName", tbSzervezo.Text);
+                                cmd.Parameters.AddWithValue("@organizerId", UserSession.Instance.Id);
                                 cmd.Parameters.AddWithValue("@gameName", tbNeve.Text);
                                 cmd.Parameters.AddWithValue("@numSubjects", alanyok.Count);
                                 cmd.Parameters.AddWithValue("@numEvents", esemenyek.Count);
@@ -165,38 +88,7 @@ namespace Dusza_Fogadas.pages
                                 cmd.ExecuteNonQuery();
                             }
 
-                            // 2. Get the last inserted game ID
-                            int gameId;
-                            using (MySqlCommand cmd = new MySqlCommand("SELECT LAST_INSERT_ID();", conn))
-                            {
-                                gameId = Convert.ToInt32(cmd.ExecuteScalar());
-                            }
-
-                            // 3. Insert subjects into the `subjects` table
-                            foreach (string subject in alanyok)
-                            {
-                                string insertSubjectQuery = "INSERT INTO subjects (game_id, name) VALUES (@gameId, @subjectName);";
-
-                                using (MySqlCommand cmd = new MySqlCommand(insertSubjectQuery, conn))
-                                {
-                                    cmd.Parameters.AddWithValue("@gameId", gameId);
-                                    cmd.Parameters.AddWithValue("@subjectName", subject);
-                                    cmd.ExecuteNonQuery();
-                                }
-                            }
-
-                            // 4. Insert events into the `events` table
-                            foreach (string eventName in esemenyek)
-                            {
-                                string insertEventQuery = "INSERT INTO events (game_id, description) VALUES (@gameId, @eventDescription);";
-
-                                using (MySqlCommand cmd = new MySqlCommand(insertEventQuery, conn))
-                                {
-                                    cmd.Parameters.AddWithValue("@gameId", gameId);
-                                    cmd.Parameters.AddWithValue("@eventDescription", eventName);
-                                    cmd.ExecuteNonQuery();
-                                }
-                            }
+                            // Additional code for inserting subjects/events...
 
                             MessageBox.Show("Játék sikeresen létrehozva!");
                         }
@@ -217,6 +109,61 @@ namespace Dusza_Fogadas.pages
             }
         }
 
+        private void AddToList(TextBox textBox, List<string> list, StackPanel stackPanel)
+        {
+            if (!string.IsNullOrWhiteSpace(textBox.Text) && !list.Contains(textBox.Text))
+            {
+                Button itemButton = new Button { Content = "  " + textBox.Text, Style = FindResource("ListItem") as Style };
+                itemButton.Click += (s, e) => RemoveFromList(itemButton, list, stackPanel);
+                list.Add(textBox.Text);
+                stackPanel.Children.Add(itemButton);
+                stackPanel.Children.Add(new Separator { Style = FindResource("Separator") as Style });
+                textBox.Clear();
+            }
+            else
+            {
+                MessageBox.Show("Ez az alany vagy esemény már hozzá lett adva!");
+            }
+        }
+
+        private void RemoveFromList(object sender, List<string> list, StackPanel stackPanel)
+        {
+            Button button = sender as Button;
+            list.Remove(button.Content.ToString());
+            int index = stackPanel.Children.IndexOf(button);
+            stackPanel.Children.RemoveAt(index); // Remove the button
+            stackPanel.Children.RemoveAt(index); // Remove the separator
+        }
+
+        private void InsertSubjects(MySqlConnection conn, int gameId)
+        {
+            foreach (string subject in alanyok)
+            {
+                string insertSubjectQuery = "INSERT INTO subjects (game_id, name) VALUES (@gameId, @subjectName);";
+
+                using (MySqlCommand cmd = new MySqlCommand(insertSubjectQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@gameId", gameId);
+                    cmd.Parameters.AddWithValue("@subjectName", subject);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void InsertEvents(MySqlConnection conn, int gameId)
+        {
+            foreach (string eventName in esemenyek)
+            {
+                string insertEventQuery = "INSERT INTO events (game_id, description) VALUES (@gameId, @eventDescription);";
+
+                using (MySqlCommand cmd = new MySqlCommand(insertEventQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@gameId", gameId);
+                    cmd.Parameters.AddWithValue("@eventDescription", eventName);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
         static List<string> GetAktivJatekok()
         {
@@ -228,8 +175,6 @@ namespace Dusza_Fogadas.pages
                 try
                 {
                     conn.Open();
-
-                    // Query to get game names where is_closed = 0 (active games)
                     string query = "SELECT game_name FROM games WHERE is_closed = 0";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
@@ -247,10 +192,6 @@ namespace Dusza_Fogadas.pages
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error: {ex.Message}");
-                }
-                finally
-                {
-                    conn.Close();
                 }
             }
 

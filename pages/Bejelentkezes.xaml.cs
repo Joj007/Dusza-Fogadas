@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using System.Security.Cryptography;
 using System.Text;
+using System.Data;
 
 namespace Dusza_Fogadas.pages
 {
@@ -23,7 +24,7 @@ namespace Dusza_Fogadas.pages
                     try
                     {
                         conn.Open();
-                        string selectQuery = "SELECT * FROM users WHERE name = @Name AND password_hash = @Password";
+                        string selectQuery = "SELECT id, email, role, balance FROM users WHERE name = @Name AND password_hash = @Password";
                         using (MySqlCommand cmd = new MySqlCommand(selectQuery, conn))
                         {
                             cmd.Parameters.AddWithValue("@Name", tbNeve.Text);
@@ -33,19 +34,17 @@ namespace Dusza_Fogadas.pages
                             {
                                 if (reader.Read())
                                 {
-                                    string userName = tbNeve.Text;
-
-                                    UserSession.Instance.UserName = userName;
-                                    UserSession.Instance.Email = UserSession.Instance.GetUserEmail(userName);
-                                    UserSession.Instance.Role = UserSession.Instance.GetUserRole(userName); 
-                                    UserSession.Instance.Balance = UserSession.Instance.GetUserBalance(userName); 
+                                    UserSession.Instance.Id = reader["id"].ToString(); // Store user ID
+                                    UserSession.Instance.UserName = tbNeve.Text;
+                                    UserSession.Instance.Email = reader["email"].ToString();
+                                    UserSession.Instance.Role = reader["role"].ToString();
+                                    UserSession.Instance.Balance = reader.IsDBNull("balance") ? (decimal?)null : reader.GetDecimal("balance");
 
                                     MessageBox.Show("Bejelentkezés sikeres!");
 
                                     DialogResult = true;
                                     Close();
                                 }
-
                                 else
                                 {
                                     MessageBox.Show("Hibás név vagy jelszó!");
@@ -73,7 +72,7 @@ namespace Dusza_Fogadas.pages
                 StringBuilder builder = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
                 {
-                    builder.Append(bytes[i].ToString("x2"));    
+                    builder.Append(bytes[i].ToString("x2"));
                 }
                 return builder.ToString();
             }

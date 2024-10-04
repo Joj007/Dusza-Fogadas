@@ -95,7 +95,7 @@
        HorizontalContentAlignment="Left"
        FontSize="16"
        Width="250" Height="50"
-       Background="Wheat" Margin="0,50,0,0" x:Name="Bejelentkezes" Click="Bejelentkezes_Click">Bejelentkezés</Button>
+       Background="Wheat" Margin="0,50,0,0" x:Name="Bejelentkezes">Bejelentkezés</Button>
 
 
             <Ellipse VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Height="100" Fill="Yellow"></Ellipse>

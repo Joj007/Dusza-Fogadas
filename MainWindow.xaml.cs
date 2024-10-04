@@ -35,6 +35,8 @@ namespace Dusza_Fogadas
 
         private void btnLezaras_Click(object sender, RoutedEventArgs e)
         {
+            Lezaras uj = new Lezaras();
+            uj.Show();
         }
 
         private void btnLekerdezes_Click(object sender, RoutedEventArgs e)
