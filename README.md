@@ -19,4 +19,4 @@
 
 
 TODO Lezárás rögzítés gomb
-     adatbázis result új szorzó osztó
+     adatbázis result új szorzó oszlop
