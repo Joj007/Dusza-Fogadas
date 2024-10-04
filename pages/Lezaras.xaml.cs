@@ -24,19 +24,24 @@ namespace Dusza_Fogadas
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT id, game_name, start_date FROM games WHERE is_closed = 0";
+
+                // Fetch games only for the logged-in user's organizer_id
+                string query = "SELECT id, game_name, start_date FROM games WHERE is_closed = 0 AND organizer_id = @organizerId";
                 using (var command = new MySqlCommand(query, connection))
-                using (var reader = command.ExecuteReader())
                 {
-                    ActiveGames = new ObservableCollection<Game>();
-                    while (reader.Read())
+                    command.Parameters.AddWithValue("@organizerId", UserSession.Instance.Id);
+                    using (var reader = command.ExecuteReader())
                     {
-                        ActiveGames.Add(new Game
+                        ActiveGames.Clear(); // Clear any existing games
+                        while (reader.Read())
                         {
-                            Id = reader.GetInt32("id"),
-                            GameName = reader.GetString("game_name"),
-                            StartDate = reader.GetDateTime("start_date")
-                        });
+                            ActiveGames.Add(new Game
+                            {
+                                Id = reader.GetInt32("id"),
+                                GameName = reader.GetString("game_name"),
+                                StartDate = reader.GetDateTime("start_date")
+                            });
+                        }
                     }
                 }
             }
@@ -125,7 +130,6 @@ namespace Dusza_Fogadas
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                // Implement logic to save the results for each combination
                 foreach (var combination in ResultCombinations)
                 {
                     // Example: Save to the results table

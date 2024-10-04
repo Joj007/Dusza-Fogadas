@@ -1,7 +1,6 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -77,6 +76,7 @@ namespace Dusza_Fogadas.pages
                             conn.Open();
                             string insertGameQuery = "INSERT INTO games (organizer_id, game_name, num_subjects, num_events, is_closed, start_date, close_date) " +
                                                       "VALUES (@organizerId, @gameName, @numSubjects, @numEvents, 0, CURDATE(), NULL);";
+                            int gameId;
 
                             using (MySqlCommand cmd = new MySqlCommand(insertGameQuery, conn))
                             {
@@ -86,9 +86,12 @@ namespace Dusza_Fogadas.pages
                                 cmd.Parameters.AddWithValue("@numEvents", esemenyek.Count);
 
                                 cmd.ExecuteNonQuery();
+                                gameId = (int)cmd.LastInsertedId; // Get the newly created game ID
                             }
 
-                            // Additional code for inserting subjects/events...
+                            // Insert subjects and events
+                            InsertSubjects(conn, gameId);
+                            InsertEvents(conn, gameId);
 
                             MessageBox.Show("Játék sikeresen létrehozva!");
                         }
