@@ -188,7 +188,7 @@ namespace Dusza_Fogadas.pages
                             // 4. Insert events into the `events` table
                             foreach (string eventName in esemenyek)
                             {
-                                string insertEventQuery = "INSERT INTO events (game_id, subject_id, description) VALUES (@gameId, NULL, @eventDescription);";
+                                string insertEventQuery = "INSERT INTO events (game_id, description) VALUES (@gameId, @eventDescription);";
 
                                 using (MySqlCommand cmd = new MySqlCommand(insertEventQuery, conn))
                                 {
