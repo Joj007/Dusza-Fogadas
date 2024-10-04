@@ -32,6 +32,7 @@ namespace Dusza_Fogadas.pages
             spAlanyok.Children.Add(alanyCim);
             alanyCim.Style = FindResource("ListTitle") as Style;
             Separator szeparator = new Separator();
+            szeparator.Style = FindResource("Separator") as Style;
             spAlanyok.Children.Add(szeparator);
 
             Label esemenyCim = new();
@@ -39,6 +40,7 @@ namespace Dusza_Fogadas.pages
             spEsemenyek.Children.Add(esemenyCim);
             esemenyCim.Style = FindResource("ListTitle") as Style;
             Separator szeparator2 = new Separator();
+            szeparator2.Style = FindResource("Separator") as Style;
             spEsemenyek.Children.Add(szeparator2);
         }
 
@@ -57,6 +59,7 @@ namespace Dusza_Fogadas.pages
                     alany.Click += btnTorolAlany;
 
                     Separator szeparator = new Separator();
+                    szeparator.Style = FindResource("Separator") as Style;
                     spAlanyok.Children.Add(szeparator);
 
                     // Clear the input field
@@ -97,6 +100,7 @@ namespace Dusza_Fogadas.pages
                     spEsemenyek.Children.Add(esemeny);
                     esemeny.Click += btnTorolEsemeny;
                     Separator szeparator2 = new Separator();
+                    szeparator2.Style = FindResource("Separator") as Style;
                     spEsemenyek.Children.Add(szeparator2);
 
                     // Clear the input field

@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <None Remove="Images\bg.jfif" />
+    <None Remove="Images\bg.jpg" />
+    <None Remove="Images\bgBee.png" />
     <None Remove="Images\bgBlack.jpg" />
     <None Remove="Images\bgBlack2.jpg" />
     <None Remove="Images\casinoBG1.jpg" />
@@ -19,6 +21,8 @@
 
   <ItemGroup>
     <Resource Include="Images\bg.jfif" />
+    <Resource Include="Images\bg.jpg" />
+    <Resource Include="Images\bgBee.png" />
     <Resource Include="Images\bgBlack.jpg" />
     <Resource Include="Images\bgBlack2.jpg" />
     <Resource Include="Images\casinoBG1.jpg" />
