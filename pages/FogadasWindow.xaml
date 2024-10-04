@@ -1,0 +1,60 @@
+﻿<Window x:Class="Dusza_Fogadas.pages.FogadasWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Dusza_Fogadas.pages"
+        mc:Ignorable="d"
+        Title="Fogadas" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Side: List of Games -->
+        <ListBox x:Name="GamesListBox" 
+                 ItemsSource="{Binding Games}" 
+                 SelectedItem="{Binding SelectedGame}" 
+                 SelectionChanged="GamesListBox_SelectionChanged" 
+                 Grid.Column="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding StartDate, StringFormat='{}{0:yyyy-MM-dd}'}" Margin="0,0,10,0" />
+                        <TextBlock Text="{Binding GameName}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Right Side: Game Details -->
+        <StackPanel Grid.Column="1" Margin="10">
+            <TextBlock FontSize="20" FontWeight="Bold" Text="Game Details" />
+            <TextBlock Text="Game Name:" FontWeight="Bold" />
+            <TextBlock Text="{Binding SelectedGame.GameName}" />
+            <TextBlock Text="Start Date:" FontWeight="Bold" />
+            <TextBlock Text="{Binding SelectedGame.StartDate, StringFormat='{}{0:yyyy-MM-dd}'}" />
+
+            <TextBlock Text="Subjects:" FontWeight="Bold" Margin="0,10,0,0"/>
+            <ListBox ItemsSource="{Binding SelectedGame.Subjects}" 
+                     SelectedItem="{Binding SelectedSubject}" 
+                     DisplayMemberPath="Name" 
+                     Height="100" />
+
+            <TextBlock Text="Events:" FontWeight="Bold" Margin="0,10,0,0"/>
+            <ListBox ItemsSource="{Binding SelectedGame.Events}" 
+                     SelectedItem="{Binding SelectedEvent}" 
+                     DisplayMemberPath="Description" 
+                     Height="100" />
+
+            <!-- Input Field for Bet Amount and Value -->
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBox x:Name="BetAmountField" Width="50" Margin="0,0,5,0" 
+                         PreviewTextInput="NumericTextBox_PreviewTextInput" />
+                <TextBox x:Name="InputField" Width="150" Margin="0,0,5,0" />
+                <Button Content="Submit" Click="SubmitButton_Click" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
