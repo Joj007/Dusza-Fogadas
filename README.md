@@ -18,5 +18,6 @@
 
 
 
-TODO Lezárás rögzítés gomb
-     adatbázis result új szorzó oszlop
+TODO admin kör
+     kijelentkezés
+     balance és felhasználó  folytonos mutatása
