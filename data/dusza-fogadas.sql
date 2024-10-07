@@ -77,7 +77,8 @@ CREATE TABLE `results` (
   `game_id` int(11) DEFAULT NULL,
   `subject_id` int(11) DEFAULT NULL,
   `event_id` int(11) DEFAULT NULL,
-  `actual_value` varchar(255) NOT NULL
+  `actual_value` varchar(255) NOT NULL,
+  `multiplier` FLOAT(11,4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 -- --------------------------------------------------------
