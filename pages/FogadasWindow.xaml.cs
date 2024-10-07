@@ -12,6 +12,7 @@ namespace Dusza_Fogadas.pages
         {
             InitializeComponent();
             DataContext = new GameViewModel();
+            lbBalance.Content = UserSession.Instance.Balance;
         }
 
         private void GamesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -28,6 +29,12 @@ namespace Dusza_Fogadas.pages
                 !int.TryParse(betAmountText, out int betAmount))
             {
                 MessageBox.Show("Töltsd ki az összeg és a tipp mezőt.");
+                return;
+            }
+
+            if (betAmount <= 0)
+            {
+                MessageBox.Show("Töltsd ki helyesen a tipp mezőt.");
                 return;
             }
 
@@ -87,6 +94,7 @@ namespace Dusza_Fogadas.pages
 
                         // Commit the transaction
                         transaction.Commit();
+                        lbBalance.Content = UserSession.Instance.Balance;
                         MessageBox.Show("Sikeres fogadás. Új egyenleged: " + newBalance);
                     }
                     catch (Exception ex)
