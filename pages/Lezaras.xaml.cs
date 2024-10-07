@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using MySql.Data.MySqlClient;
 
@@ -20,19 +21,16 @@ namespace Dusza_Fogadas
 
         private void LoadActiveGames()
         {
-            string connectionString = "Server=localhost;Database=dusza-fogadas;Uid=root;Pwd=;";
-            using (var connection = new MySqlConnection(connectionString))
+            using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
             {
                 connection.Open();
-
-                // Fetch games only for the logged-in user's organizer_id
                 string query = "SELECT id, game_name, start_date FROM games WHERE is_closed = 0 AND organizer_id = @organizerId";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@organizerId", UserSession.Instance.Id);
                     using (var reader = command.ExecuteReader())
                     {
-                        ActiveGames.Clear(); // Clear any existing games
+                        ActiveGames.Clear();
                         while (reader.Read())
                         {
                             ActiveGames.Add(new Game
@@ -45,7 +43,6 @@ namespace Dusza_Fogadas
                     }
                 }
             }
-
             ActiveGamesListBox.ItemsSource = ActiveGames;
         }
 
@@ -60,15 +57,11 @@ namespace Dusza_Fogadas
         private void LoadGameCombinations(Game game)
         {
             ResultCombinations.Clear();
-
-            // Load subjects and events for the selected game
-            string connectionString = "Server=localhost;Database=dusza-fogadas;Uid=root;Pwd=;";
-            using (var connection = new MySqlConnection(connectionString))
+            using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
             {
                 connection.Open();
 
                 // Load subjects
-                var subjects = new ObservableCollection<Subject>();
                 string subjectsQuery = "SELECT * FROM subjects WHERE game_id = @gameId";
                 using (var command = new MySqlCommand(subjectsQuery, connection))
                 {
@@ -77,7 +70,7 @@ namespace Dusza_Fogadas
                     {
                         while (reader.Read())
                         {
-                            subjects.Add(new Subject
+                            game.Subjects.Add(new Subject
                             {
                                 Id = reader.GetInt32("id"),
                                 Name = reader.GetString("name")
@@ -86,8 +79,7 @@ namespace Dusza_Fogadas
                     }
                 }
 
-                // Load events and create combinations
-                var events = new ObservableCollection<Event>();
+                // Load events
                 string eventsQuery = "SELECT * FROM events WHERE game_id = @gameId";
                 using (var command = new MySqlCommand(eventsQuery, connection))
                 {
@@ -96,7 +88,7 @@ namespace Dusza_Fogadas
                     {
                         while (reader.Read())
                         {
-                            events.Add(new Event
+                            game.Events.Add(new Event
                             {
                                 Id = reader.GetInt32("id"),
                                 Description = reader.GetString("description")
@@ -106,9 +98,9 @@ namespace Dusza_Fogadas
                 }
 
                 // Create combinations
-                foreach (var subject in subjects)
+                foreach (var subject in game.Subjects)
                 {
-                    foreach (var ev in events)
+                    foreach (var ev in game.Events)
                     {
                         ResultCombinations.Add(new ResultCombination
                         {
@@ -119,32 +111,127 @@ namespace Dusza_Fogadas
                     }
                 }
             }
-
             ResultsItemsControl.ItemsSource = ResultCombinations;
         }
 
         private void RogzitButton_Click(object sender, RoutedEventArgs e)
         {
-            // Save results to the database
-            string connectionString = "Server=localhost;Database=dusza-fogadas;Uid=root;Pwd=;";
-            using (var connection = new MySqlConnection(connectionString))
+            var selectedGame = ActiveGamesListBox.SelectedItem as Game;
+            if (selectedGame == null)
+            {
+                MessageBox.Show("No game selected.");
+                return;
+            }
+
+            using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
             {
                 connection.Open();
                 foreach (var combination in ResultCombinations)
                 {
-                    // Example: Save to the results table
-                    string query = "INSERT INTO results (subject_name, event_description, result) VALUES (@subjectName, @eventDescription, @result)";
+                    int subjectId = GetSubjectIdByName(combination.SubjectName, connection);
+                    int eventId = GetEventIdByDescription(combination.EventDescription, connection);
+                    int numberOfBets = GetNumberOfBets(subjectId, eventId, connection);
+                    double multiplier = numberOfBets > 0 ? 1 + 5 / Math.Pow(2, numberOfBets - 1) : 0;
+
+                    string query = "INSERT INTO results (game_id, subject_id, event_id, actual_value, multiplier) VALUES (@gameId, @subjectId, @eventId, @result, @multiplier)";
                     using (var command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@subjectName", combination.SubjectName);
-                        command.Parameters.AddWithValue("@eventDescription", combination.EventDescription);
+                        command.Parameters.AddWithValue("@gameId", selectedGame.Id);
+                        command.Parameters.AddWithValue("@subjectId", subjectId);
+                        command.Parameters.AddWithValue("@eventId", eventId);
                         command.Parameters.AddWithValue("@result", combination.Result);
+                        command.Parameters.AddWithValue("@multiplier", multiplier);
                         command.ExecuteNonQuery();
                     }
+
+                    ProcessBets(selectedGame.Id, subjectId, eventId, combination.Result, multiplier, connection);
+                }
+                UpdateGameStatus(selectedGame.Id, connection);
+            }
+            MessageBox.Show("Results recorded and game closed successfully.");
+            Close();
+        }
+
+        private void ProcessBets(int gameId, int subjectId, int eventId, string actualValue, double multiplier, MySqlConnection connection)
+        {
+            string query = "SELECT user_id, bet_amount FROM bets WHERE game_id = @gameId AND subject_id = @subjectId AND event_id = @eventId AND bet_value = @actualValue";
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@gameId", gameId);
+                command.Parameters.AddWithValue("@subjectId", subjectId);
+                command.Parameters.AddWithValue("@eventId", eventId);
+                command.Parameters.AddWithValue("@actualValue", actualValue);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int userId = reader.GetInt32("user_id");
+                        double betAmount = reader.GetDouble("bet_amount");
+                        double winnings = betAmount * multiplier;
+
+                        UpdateUserBalance(userId, winnings); // Ensure this command executes after the reader is closed
+                    }
+                } // Ensure the reader is closed here
+            }
+        }
+
+        private void UpdateUserBalance(int userId, double winnings)
+        {
+            using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
+            {
+                connection.Open();
+                string query = "UPDATE users SET balance = balance + @winnings WHERE id = @userId";
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@winnings", winnings);
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.ExecuteNonQuery();
                 }
             }
+        }
 
-            MessageBox.Show("Results recorded successfully.");
+        private void UpdateGameStatus(int gameId, MySqlConnection connection)
+        {
+            string query = "UPDATE games SET is_closed = 1, close_date = @closeDate WHERE id = @gameId";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@closeDate", DateTime.Now);
+                command.Parameters.AddWithValue("@gameId", gameId);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private int GetSubjectIdByName(string subjectName, MySqlConnection connection)
+        {
+            string query = "SELECT id FROM subjects WHERE name = @subjectName";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@subjectName", subjectName);
+                return Convert.ToInt32(command.ExecuteScalar());
+            }
+        }
+
+        private int GetEventIdByDescription(string eventDescription, MySqlConnection connection)
+        {
+            string query = "SELECT id FROM events WHERE description = @eventDescription";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@eventDescription", eventDescription);
+                return Convert.ToInt32(command.ExecuteScalar());
+            }
+        }
+
+        private int GetNumberOfBets(int subjectId, int eventId, MySqlConnection connection)
+        {
+            string query = "SELECT COUNT(*) FROM bets WHERE subject_id = @subjectId AND event_id = @eventId";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@subjectId", subjectId);
+                command.Parameters.AddWithValue("@eventId", eventId);
+                return Convert.ToInt32(command.ExecuteScalar());
+            }
         }
     }
 
