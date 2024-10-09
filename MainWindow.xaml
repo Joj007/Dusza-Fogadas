@@ -80,7 +80,7 @@
                 <Button Grid.Row="0" Content="Játék létrehozása" Style="{StaticResource myButtonStyle}" Click="btnLetrehozas_Click" x:Name="btnLetrehozas" IsEnabled="False"/>
                 <Button Grid.Row="1" Content="Fogadás leadása" Style="{StaticResource myButtonStyle}" Click="btnLeadas_Click" x:Name="btnLeadas" IsEnabled="False"/>
                 <Button Grid.Row="2" Content="Játék lezárása" Style="{StaticResource myButtonStyle}" Click="btnLezaras_Click" x:Name="btnLezaras" IsEnabled="False"/>
-                <Button Grid.Row="3" Content="Lekérdezések" Style="{StaticResource myButtonStyle}" Click="btnLekerdezes_Click" x:Name="btnLekerdezes" IsEnabled="False"/>
+                <Button Grid.Row="3" Content="Adminisztráció" Style="{StaticResource myButtonStyle}" Click="btnAdmin_Click" x:Name="btnAdmin" IsEnabled="False"/>
                 <Button Grid.Row="4" Content="Kilépés" Style="{StaticResource myButtonStyle}" Click="btnKilepes_Click" x:Name="btnKilepes"/>
 
             </Grid>

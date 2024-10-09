@@ -28,9 +28,10 @@ namespace Dusza_Fogadas
             uj.Show();
         }
 
-        private void btnLekerdezes_Click(object sender, RoutedEventArgs e)
+        private void btnAdmin_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation for Lekérdezések
+            AdminPanel adminPanel = new AdminPanel();
+            adminPanel.Show();
         }
 
         private void btnKilepes_Click(object sender, RoutedEventArgs e)
@@ -59,7 +60,7 @@ namespace Dusza_Fogadas
             btnLetrehozas.IsEnabled = false;
             btnLeadas.IsEnabled = false;
             btnLezaras.IsEnabled = false;
-            btnLekerdezes.IsEnabled = false;
+            btnAdmin.IsEnabled = false;
 
             // Enable buttons based on the user role
             if (userRole == "szervezõ")
@@ -70,6 +71,10 @@ namespace Dusza_Fogadas
             else if (userRole == "fogadó")
             {
                 btnLeadas.IsEnabled = true;
+            }
+            else if (userRole == "admin")
+            {
+                btnAdmin.IsEnabled = true;
             }
         }
     }

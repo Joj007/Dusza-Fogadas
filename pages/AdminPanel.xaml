@@ -1,0 +1,21 @@
+﻿<Window x:Class="Dusza_Fogadas.AdminPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Admin Panel" Height="600" Width="800">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Users">
+                <StackPanel>
+                    <ListBox Name="UsersListBox" SelectionChanged="UsersListBox_SelectionChanged"/>
+                    <Button Content="Deactivate" Click="DeactivateButton_Click" />
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Games">
+                <StackPanel>
+                    <ListBox Name="GamesListBox" SelectionChanged="GamesListBox_SelectionChanged"/>
+                    <Button Content="Delete" Click="DeleteGameButton_Click" />
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

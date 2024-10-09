@@ -8,6 +8,11 @@ public class Game
 
     public ObservableCollection<Subject> Subjects { get; set; } = new ObservableCollection<Subject>();
     public ObservableCollection<Event> Events { get; set; } = new ObservableCollection<Event>();
+
+    public override string ToString()
+    {
+        return $"{GameName} - alanyok száma: {Subjects.Count()} események száma: {Events.Count()} Létrehozva: {StartDate.ToShortDateString()}";
+    }
 }
 
 public class Subject
