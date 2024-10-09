@@ -162,5 +162,10 @@ namespace Dusza_Fogadas.pages
                 return builder.ToString();
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
