@@ -233,6 +233,11 @@ namespace Dusza_Fogadas
                 return Convert.ToInt32(command.ExecuteScalar());
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 
     public class ResultCombination

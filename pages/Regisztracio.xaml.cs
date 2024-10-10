@@ -10,10 +10,10 @@ namespace Dusza_Fogadas.pages
 {
     public partial class Regisztracio : Window
     {
+        string szerepkor = "fogadó";
         public Regisztracio()
         {
             InitializeComponent();
-            cbSzerepkor.SelectedItem = cbSzerepkor.Items.Cast<ComboBoxItem>().FirstOrDefault(item => ((ComboBoxItem)item).Content.ToString() == "fogadó");
         }
 
         private void btnRegisztral_Click(object sender, RoutedEventArgs e)
@@ -55,7 +55,7 @@ namespace Dusza_Fogadas.pages
             }
 
             // Determine the balance based on the role
-            string selectedRole = ((ComboBoxItem)cbSzerepkor.SelectedItem).Content.ToString();
+            string selectedRole = szerepkor;
             object initialBalance = selectedRole == "fogadó" ? (object)100 : DBNull.Value;
 
             // Proceed with registration
@@ -166,6 +166,22 @@ namespace Dusza_Fogadas.pages
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            szerepkor = "szervező";
+            btnSzervezo.Style = FindResource("SzerepkorBekapcs") as Style;
+            btnFogado.Style = FindResource("SzerepkorKikapcs") as Style;
+
+
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            szerepkor = "fogadó";
+            btnSzervezo.Style = FindResource("SzerepkorKikapcs") as Style;
+            btnFogado.Style = FindResource("SzerepkorBekapcs") as Style;
         }
     }
 }
