@@ -116,5 +116,10 @@ namespace Dusza_Fogadas.pages
         {
             return int.TryParse(text, out _);
         }
+
+        private void btnVissza_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
