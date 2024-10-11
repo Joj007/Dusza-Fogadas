@@ -176,5 +176,10 @@ namespace Dusza_Fogadas
                 command.ExecuteNonQuery();
             }
         }
+
+        private void btnVissza_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
