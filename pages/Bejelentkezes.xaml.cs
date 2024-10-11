@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Windows;
 using System.Security.Cryptography;
@@ -88,6 +88,11 @@ namespace Dusza_Fogadas.pages
         {
             Regisztracio regisztracio = new Regisztracio();
             regisztracio.Show();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
