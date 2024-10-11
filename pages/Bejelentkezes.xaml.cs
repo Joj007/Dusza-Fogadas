@@ -36,7 +36,7 @@ namespace Dusza_Fogadas.pages
                                 if (reader.Read())
                                 {
                                     bool isActive = reader["is_active"].ToString() == "1";
-                                    if (!isActive)
+                                    if (isActive)
                                     {
                                         MessageBox.Show("A felhasználó profil nem aktív. További információért keressen fel egy adminisztrátort.");
                                         return;
