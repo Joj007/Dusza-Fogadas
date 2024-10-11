@@ -8,6 +8,6 @@
 
     public override string ToString()
     {
-        return $"{Name} ({Email}) - ({Role})";
+        return $"{Name} ({Email}) - ({Role}) {(IsActive ? "aktív" : "nem aktív")}";
     }
 }

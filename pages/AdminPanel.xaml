@@ -4,16 +4,19 @@
         Title="Admin Panel" Height="600" Width="800">
     <Grid>
         <TabControl>
-            <TabItem Header="Users">
+            <TabItem Header="Felhasználók">
                 <StackPanel>
                     <ListBox Name="UsersListBox" SelectionChanged="UsersListBox_SelectionChanged"/>
-                    <Button Content="Deactivate" Click="DeactivateButton_Click" />
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Button Content="Aktiválás" Click="ActivateButton_Click" Margin="5" />
+                        <Button Content="Deaktiválás" Click="DeactivateButton_Click" Margin="5" />
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Games">
+            <TabItem Header="Játékok">
                 <StackPanel>
                     <ListBox Name="GamesListBox" SelectionChanged="GamesListBox_SelectionChanged"/>
-                    <Button Content="Delete" Click="DeleteGameButton_Click" />
+                    <Button Content="Törlés" Click="DeleteGameButton_Click" />
                 </StackPanel>
             </TabItem>
         </TabControl>
