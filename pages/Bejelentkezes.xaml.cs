@@ -16,7 +16,7 @@ namespace Dusza_Fogadas.pages
 
         private void btnBejelentkezik_Click(object sender, RoutedEventArgs e)
         {
-            if (tbNeve.Text != "" && pbJelszo.Password != "")
+            if (!string.IsNullOrWhiteSpace(tbNeve.Text) && !string.IsNullOrWhiteSpace(pbJelszo.Password))
             {
                 string connectionString = "Server=localhost;Database=dusza-fogadas;Uid=root;Pwd=;";
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -24,7 +24,8 @@ namespace Dusza_Fogadas.pages
                     try
                     {
                         conn.Open();
-                        string selectQuery = "SELECT id, email, role, balance FROM users WHERE name = @Name AND password_hash = @Password";
+                        // Get user details
+                        string selectQuery = "SELECT id, email, role, balance, is_active FROM users WHERE name = @Name AND password_hash = @Password";
                         using (MySqlCommand cmd = new MySqlCommand(selectQuery, conn))
                         {
                             cmd.Parameters.AddWithValue("@Name", tbNeve.Text);
@@ -34,14 +35,21 @@ namespace Dusza_Fogadas.pages
                             {
                                 if (reader.Read())
                                 {
-                                    UserSession.Instance.Id = reader["id"].ToString(); // Store user ID
+                                    bool isActive = reader["is_active"].ToString() == "1";
+                                    if (!isActive)
+                                    {
+                                        MessageBox.Show("A felhasználó profil nem aktív. További információért keressen fel egy adminisztrátort.");
+                                        return;
+                                    }
+
+                                    // Set user session data
+                                    UserSession.Instance.Id = reader["id"].ToString();
                                     UserSession.Instance.UserName = tbNeve.Text;
                                     UserSession.Instance.Email = reader["email"].ToString();
                                     UserSession.Instance.Role = reader["role"].ToString();
                                     UserSession.Instance.Balance = reader.IsDBNull("balance") ? (decimal?)null : reader.GetDecimal("balance");
 
                                     MessageBox.Show("Bejelentkezés sikeres!");
-
                                     DialogResult = true;
                                     Close();
                                 }
@@ -62,6 +70,11 @@ namespace Dusza_Fogadas.pages
             {
                 MessageBox.Show("Töltsd ki az összes mezőt!");
             }
+        }
+
+        private bool IsUserActive(MySqlDataReader reader)
+        {
+            return reader.GetBoolean("is_active");
         }
 
         public static string HashPassword(string password)
