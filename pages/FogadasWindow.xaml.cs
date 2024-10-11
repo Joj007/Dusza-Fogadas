@@ -94,7 +94,7 @@ namespace Dusza_Fogadas.pages
 
                         // Commit the transaction
                         transaction.Commit();
-                        lbBalance.Content = UserSession.Instance.Balance;
+                        lbBalance.Content = newBalance;
                         MessageBox.Show("Sikeres fogadás. Új egyenleged: " + newBalance);
                     }
                     catch (Exception ex)

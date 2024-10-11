@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Windows;
 using System.Security.Cryptography;
@@ -24,7 +24,7 @@ namespace Dusza_Fogadas.pages
                     try
                     {
                         conn.Open();
-                        string selectQuery = "SELECT id, email, role, balance FROM users WHERE name = @Name AND password_hash = @Password";
+                        string selectQuery = "SELECT id, email, role, balance, is_active FROM users WHERE name = @Name AND password_hash = @Password";
                         using (MySqlCommand cmd = new MySqlCommand(selectQuery, conn))
                         {
                             cmd.Parameters.AddWithValue("@Name", tbNeve.Text);
@@ -34,6 +34,13 @@ namespace Dusza_Fogadas.pages
                             {
                                 if (reader.Read())
                                 {
+                                    bool isActive = reader.GetBoolean("is_active");
+                                    if (!isActive)
+                                    {
+                                        MessageBox.Show("A felhasználó profil nem aktív. További információért keressen fel egy adminisztrátort.");
+                                        return;
+                                    }
+
                                     UserSession.Instance.Id = reader["id"].ToString(); // Store user ID
                                     UserSession.Instance.UserName = tbNeve.Text;
                                     UserSession.Instance.Email = reader["email"].ToString();
@@ -41,7 +48,6 @@ namespace Dusza_Fogadas.pages
                                     UserSession.Instance.Balance = reader.IsDBNull("balance") ? (decimal?)null : reader.GetDecimal("balance");
 
                                     MessageBox.Show("Bejelentkezés sikeres!");
-
                                     DialogResult = true;
                                     Close();
                                 }

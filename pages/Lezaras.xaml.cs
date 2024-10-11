@@ -60,6 +60,8 @@ namespace Dusza_Fogadas
             using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
             {
                 connection.Open();
+                game.Subjects.Clear();
+                game.Events.Clear();
 
                 // Load subjects
                 string subjectsQuery = "SELECT * FROM subjects WHERE game_id = @gameId";
@@ -128,8 +130,8 @@ namespace Dusza_Fogadas
                 connection.Open();
                 foreach (var combination in ResultCombinations)
                 {
-                    int subjectId = GetSubjectIdByName(combination.SubjectName, connection);
-                    int eventId = GetEventIdByDescription(combination.EventDescription, connection);
+                    int subjectId = GetSubjectIdByName(combination.SubjectName, selectedGame.Id, connection);
+                    int eventId = GetEventIdByDescription(combination.EventDescription, selectedGame.Id, connection);
                     int numberOfBets = GetNumberOfBets(subjectId, eventId, connection);
                     double multiplier = numberOfBets > 0 ? 1 + 5 / Math.Pow(2, numberOfBets - 1) : 0;
 
@@ -203,22 +205,24 @@ namespace Dusza_Fogadas
             }
         }
 
-        private int GetSubjectIdByName(string subjectName, MySqlConnection connection)
+        private int GetSubjectIdByName(string subjectName, int gameId, MySqlConnection connection)
         {
-            string query = "SELECT id FROM subjects WHERE name = @subjectName";
+            string query = "SELECT id FROM subjects WHERE name = @subjectName AND game_id = @gameId";
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@subjectName", subjectName);
+                command.Parameters.AddWithValue("@gameId", gameId);
                 return Convert.ToInt32(command.ExecuteScalar());
             }
         }
 
-        private int GetEventIdByDescription(string eventDescription, MySqlConnection connection)
+        private int GetEventIdByDescription(string eventDescription, int gameId, MySqlConnection connection)
         {
-            string query = "SELECT id FROM events WHERE description = @eventDescription";
+            string query = "SELECT id FROM events WHERE description = @eventDescription AND game_id = @gameId";
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@eventDescription", eventDescription);
+                command.Parameters.AddWithValue("@gameId", gameId);
                 return Convert.ToInt32(command.ExecuteScalar());
             }
         }
