@@ -83,5 +83,10 @@ namespace Dusza_Fogadas.pages
             Regisztracio regisztracio = new Regisztracio();
             regisztracio.Show();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

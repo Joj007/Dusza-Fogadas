@@ -94,6 +94,7 @@ namespace Dusza_Fogadas.pages
                             InsertEvents(conn, gameId);
 
                             MessageBox.Show("Játék sikeresen létrehozva!");
+                            Close();
                         }
                         catch (Exception ex)
                         {
@@ -110,6 +111,7 @@ namespace Dusza_Fogadas.pages
             {
                 MessageBox.Show("Töltsd ki az összes mezőt!");
             }
+            
         }
 
         private void AddToList(TextBox textBox, List<string> list, StackPanel stackPanel)
