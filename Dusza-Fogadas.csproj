@@ -10,6 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Bbg1.jpg" />
+    <None Remove="Images\Bbg2.jpg" />
+    <None Remove="Images\Bbg3.jpg" />
+    <None Remove="Images\Bbg4.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Bbg1.jpg" />
+    <Resource Include="Images\Bbg2.jpg" />
+    <Resource Include="Images\Bbg3.jpg" />
+    <Resource Include="Images\Bbg4.jpg" />
     <Resource Include="Images\bg.jfif" />
     <Resource Include="Images\bg.jpg" />
     <Resource Include="Images\bgBee.png" />

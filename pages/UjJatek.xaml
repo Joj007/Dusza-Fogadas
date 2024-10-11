@@ -121,8 +121,9 @@
 
         </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="../Images/bgBee.png"></ImageBrush>
+        <ImageBrush ImageSource="../Images/Bbg2.jpg"></ImageBrush>
     </Window.Background>
+    <!--bgBee.png-->
 
 
     <Grid>
@@ -154,7 +155,7 @@
 
         <StackPanel Style = "{StaticResource InputField}" Grid.Row="3" Grid.Column="0">
             <Label Style = "{StaticResource Label}" Grid.Row="2">Kik az alanyok? :</Label>
-            <TextBox MaxLength="12" Style = "{StaticResource InputMezo}" x:Name="tbAlany"></TextBox>
+            <TextBox MaxLength="16" Style = "{StaticResource InputMezo}" x:Name="tbAlany"></TextBox>
             <Button Style = "{StaticResource UploadButton}" x:Name="btnFelveszAlany" Click="btnFelveszAlany_Click">
                 <Run TextDecorations="Underline">Felvesz</Run>
             </Button>
@@ -162,7 +163,7 @@
 
         <StackPanel Style = "{StaticResource InputField}" Grid.Row="3" Grid.Column="1">
             <Label Style = "{StaticResource Label}" Grid.Row="3">Mik az események? :</Label>
-            <TextBox MaxLength="12" Style = "{StaticResource InputMezo}" x:Name="tbEsemeny"></TextBox>
+            <TextBox MaxLength="24" Style = "{StaticResource InputMezo}" x:Name="tbEsemeny"></TextBox>
             <Button Style = "{StaticResource UploadButton}" x:Name="btnFelveszEsemeny" Click="btnFelveszEsemeny_Click">
                 <Run TextDecorations="Underline">Felvesz</Run>
             </Button>

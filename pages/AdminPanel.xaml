@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Dusza_Fogadas.AdminPanel"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        WindowStyle="None" AllowsTransparency="True" Background="Transparent" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+        WindowStyle="None" AllowsTransparency="True" Height="600" Width="800" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <!-- Style for TabControl -->
@@ -82,8 +82,11 @@
         </Style>
 
     </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="../Images/Bbg4.jpg"></ImageBrush>
+    </Window.Background>
 
-    <Border BorderBrush="Gold" BorderThickness="3" CornerRadius="0 0 0 0" Background="Black">
+    <Border BorderBrush="Gold" BorderThickness="3" CornerRadius="0 0 0 0" Background="Transparent">
         <Grid Background="Transparent">
             <TabControl HorizontalContentAlignment="Center" Background="Transparent" BorderThickness="0">
                 <TabControl.Resources>
