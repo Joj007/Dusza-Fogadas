@@ -51,7 +51,8 @@ namespace Dusza_Fogadas
             using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
             {
                 connection.Open();
-                string query = "SELECT g.id, g.game_name, g.start_date FROM games g";
+                // Updated query to exclude closed games
+                string query = "SELECT g.id, g.game_name, g.start_date FROM games g WHERE g.is_closed = 0";
                 using (var command = new MySqlCommand(query, connection))
                 using (var reader = command.ExecuteReader())
                 {

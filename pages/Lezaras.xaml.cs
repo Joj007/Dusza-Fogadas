@@ -121,8 +121,18 @@ namespace Dusza_Fogadas
             var selectedGame = ActiveGamesListBox.SelectedItem as Game;
             if (selectedGame == null)
             {
-                MessageBox.Show("No game selected.");
+                MessageBox.Show("Nincsen játék kiválasztva.");
                 return;
+            }
+
+            // Validate that all result fields are filled
+            foreach (var combination in ResultCombinations)
+            {
+                if (string.IsNullOrWhiteSpace(combination.Result))
+                {
+                    MessageBox.Show("Kérlek töltsd ki az összes mezőt.");
+                    return;
+                }
             }
 
             using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
