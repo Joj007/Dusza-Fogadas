@@ -160,7 +160,7 @@ namespace Dusza_Fogadas
                 }
                 UpdateGameStatus(selectedGame.Id, connection);
             }
-            MessageBox.Show("Results recorded and game closed successfully.");
+            MessageBox.Show("Az adatokat rögzíve lettek és a játék sikeresen lezárva.");
             Close();
         }
 
