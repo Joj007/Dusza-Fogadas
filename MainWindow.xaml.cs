@@ -41,6 +41,7 @@ namespace Dusza_Fogadas
 
         private void Bejelentkezes_Click(object sender, RoutedEventArgs e)
         {
+
             Bejelentkezes wasd = new Bejelentkezes();
             bool? result = wasd.ShowDialog();
 
@@ -51,8 +52,40 @@ namespace Dusza_Fogadas
 
                 // Enable buttons based on user role
                 ConfigureButtonAccess(userRole);
+                Bejelentkezes.Click -= Bejelentkezes_Click;
+                Bejelentkezes.Click += Kijelentkezes_Click;
+                Bejelentkezes.Content = "Kijelentkezés";
+                lblNev.Content = UserSession.Instance.UserName;
+                grdKartya.Visibility = Visibility.Visible;
+                lblEgyenleg.Content = "Egyenleg: " + UserSession.Instance.Balance + "$";
+                if (UserSession.Instance.Role=="fogadó")
+                {
+                    lblNev.FontSize = 24;
+                    lblNev.VerticalAlignment = VerticalAlignment.Top;
+                    lblEgyenleg.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    lblNev.FontSize = 36;
+                    lblNev.VerticalAlignment = VerticalAlignment.Center;
+                    lblEgyenleg.Visibility = Visibility.Hidden;
+                }
             }
         }
+
+        private void Kijelentkezes_Click(object sender, RoutedEventArgs e)
+        {
+            Bejelentkezes.Click += Bejelentkezes_Click;
+            Bejelentkezes.Click -= Kijelentkezes_Click;
+            Bejelentkezes.Content = "Bejelentkezés";
+            ConfigureButtonAccess("");
+            lblNev.Content = "Vendég";
+            lblEgyenleg.Content = "Egyenleg: 0";
+            grdKartya.Visibility = Visibility.Hidden;
+            MessageBox.Show("A kijelntkezés sikeres!");
+
+        }
+
 
         private void ConfigureButtonAccess(string userRole)
         {
