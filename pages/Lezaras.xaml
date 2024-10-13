@@ -13,7 +13,7 @@
                             <Grid x:Name="Grid">
                                 <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" 
                                            Height="Auto" Fill="Transparent"/>
-                                <Border x:Name="Rectangle1" CornerRadius="10 0 0 10" HorizontalAlignment="Stretch" 
+                                <Border x:Name="Rectangle1" CornerRadius="10 10 10 10" HorizontalAlignment="Stretch" 
                                         VerticalAlignment="Stretch" Width="Auto" Height="Auto" 
                                         Background="{TemplateBinding Background}"/>
                             </Grid>
@@ -195,19 +195,21 @@
 
             <!-- Combinations and Results with ScrollViewer -->
             <StackPanel Grid.Column="1">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500">
-                    <ItemsControl x:Name="ResultsItemsControl">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding SubjectName}" Margin="5" Style="{StaticResource LabelStyle}"/>
-                                    <TextBlock Text="-" Margin="5" Style="{StaticResource LabelStyle}"/>
-                                    <TextBlock Text="{Binding EventDescription}" Margin="5" Style="{StaticResource LabelStyle}"/>
-                                    <TextBox Margin="5" Style="{StaticResource TextBoxStyle}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="500">
+                    <StackPanel Orientation="Vertical">
+                        <ItemsControl x:Name="ResultsItemsControl">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                        <TextBlock Text="{Binding SubjectName}" Margin="5" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Text="-" Margin="5" Style="{StaticResource LabelStyle}"/>
+                                        <TextBlock Text="{Binding EventDescription}" Margin="5" Style="{StaticResource LabelStyle}"/>
+                                        <TextBox Margin="5" Style="{StaticResource TextBoxStyle}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </ScrollViewer>
                 <Border BorderThickness="0 1 0 0" BorderBrush="Gold">
                     <Grid Width="360" Height="95">
@@ -215,10 +217,7 @@
                         <Button Content="Vissza" HorizontalAlignment="Left" Margin="10" Style="{StaticResource ButtonStyle}" Click="Button_Click"/>
                     </Grid>
                 </Border>
-
-                <!-- Fixed position button -->
-                
-            </StackPanel>   
+            </StackPanel>
         </Grid>
     </Border>
 </Window>

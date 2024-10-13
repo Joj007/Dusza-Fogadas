@@ -109,19 +109,19 @@
 
             <!-- Right Side: Game Details -->
             <StackPanel Grid.Column="1" Margin="10">
-                <TextBlock FontSize="20" FontWeight="Bold" Text="Game Details" />
-                <TextBlock Text="Game Name:" FontWeight="Bold" />
+                <TextBlock FontSize="20" FontWeight="Bold" Text="Játék részletei" />
+                <TextBlock Text="Játék Neve:" FontWeight="Bold" />
                 <TextBlock Text="{Binding SelectedGame.GameName}" />
-                <TextBlock Text="Start Date:" FontWeight="Bold" />
+                <TextBlock Text="Játék Kezdete:" FontWeight="Bold" />
                 <TextBlock Text="{Binding SelectedGame.StartDate, StringFormat='{}{0:yyyy-MM-dd}'}" />
 
-                <TextBlock Text="Subjects:" FontWeight="Bold" Margin="0,10,0,0"/>
+                <TextBlock Text="Alanyok:" FontWeight="Bold" Margin="0,10,0,0"/>
                 <ListBox ItemsSource="{Binding SelectedGame.Subjects}" 
                          SelectedItem="{Binding SelectedSubject}" 
                          DisplayMemberPath="Name" 
                          Height="100" />
 
-                <TextBlock Text="Events:" FontWeight="Bold" Margin="0,10,0,0"/>
+                <TextBlock Text="Események:" FontWeight="Bold" Margin="0,10,0,0"/>
                 <ListBox ItemsSource="{Binding SelectedGame.Events}" 
                          SelectedItem="{Binding SelectedEvent}" 
                          DisplayMemberPath="Description" 
@@ -138,7 +138,7 @@
                              PreviewTextInput="NumericTextBox_PreviewTextInput" VerticalAlignment="Center"/>
                     <Label Margin="30 0 0 0" VerticalContentAlignment="Center" Foreground="Gold">Tipp:</Label>
                     <TextBox x:Name="InputField" VerticalAlignment="Center"/>
-                    <Button  Content="Submit" Click="SubmitButton_Click" Margin="20,0,0,0" />
+                    <Button  Content="Küldés" Click="SubmitButton_Click" Margin="20,0,0,0" />
                     <Label HorizontalAlignment="Right">Egyenleged:</Label>
                     <Label x:Name="lbBalance" HorizontalAlignment="Left">0</Label>
                 </StackPanel>

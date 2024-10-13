@@ -1,8 +1,8 @@
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using MySql.Data.MySqlClient;
 
 namespace Dusza_Fogadas.pages
 {
@@ -33,19 +33,43 @@ namespace Dusza_Fogadas.pages
             AddToList(tbAlany, alanyok, spAlanyok);
         }
 
-        private void btnTorolAlany(object sender, RoutedEventArgs e)
-        {
-            RemoveFromList(sender, alanyok, spAlanyok);
-        }
-
         private void btnFelveszEsemeny_Click(object sender, RoutedEventArgs e)
         {
             AddToList(tbEsemeny, esemenyek, spEsemenyek);
         }
 
-        private void btnTorolEsemeny(object sender, RoutedEventArgs e)
+        private void AddToList(TextBox textBox, List<string> list, StackPanel stackPanel)
         {
-            RemoveFromList(sender, esemenyek, spEsemenyek);
+            string itemText = textBox.Text.Trim();
+            if (!string.IsNullOrWhiteSpace(itemText) && !list.Contains(itemText))
+            {
+                Button itemButton = new Button { Content = "  " + itemText, Style = FindResource("ListItem") as Style };
+                itemButton.Click += (s, e) => RemoveFromList(itemButton, list, stackPanel);
+                list.Add(itemText);
+                stackPanel.Children.Add(itemButton);
+                stackPanel.Children.Add(new Separator { Style = FindResource("Separator") as Style });
+                textBox.Clear();
+            }
+            else
+            {
+                MessageBox.Show("Ez az alany vagy esemény már hozzá lett adva!");
+            }
+        }
+
+        private void RemoveFromList(Button button, List<string> list, StackPanel stackPanel)
+        {
+            if (button != null)
+            {
+                string itemText = button.Content.ToString().Trim();
+                list.Remove(itemText); // Remove the item from the list
+
+                stackPanel.Children.Remove(button); // Remove the button
+                int index = stackPanel.Children.IndexOf(button);
+                if (index >= 0 && index < stackPanel.Children.Count) // Check if the separator is still in range
+                {
+                    stackPanel.Children.RemoveAt(index); // Remove the separator
+                }
+            }
         }
 
         private void btnMegse_Click(object sender, RoutedEventArgs e)
@@ -57,7 +81,7 @@ namespace Dusza_Fogadas.pages
         {
             if (string.IsNullOrEmpty(UserSession.Instance.Id))
             {
-                MessageBox.Show("Organizer ID is not set. Please log in again.");
+                MessageBox.Show("Nincs bejelentkezve");
                 return;
             }
 
@@ -111,33 +135,6 @@ namespace Dusza_Fogadas.pages
             {
                 MessageBox.Show("Töltsd ki az összes mezőt!");
             }
-            
-        }
-
-        private void AddToList(TextBox textBox, List<string> list, StackPanel stackPanel)
-        {
-            if (!string.IsNullOrWhiteSpace(textBox.Text) && !list.Contains(textBox.Text))
-            {
-                Button itemButton = new Button { Content = "  " + textBox.Text, Style = FindResource("ListItem") as Style };
-                itemButton.Click += (s, e) => RemoveFromList(itemButton, list, stackPanel);
-                list.Add(textBox.Text);
-                stackPanel.Children.Add(itemButton);
-                stackPanel.Children.Add(new Separator { Style = FindResource("Separator") as Style });
-                textBox.Clear();
-            }
-            else
-            {
-                MessageBox.Show("Ez az alany vagy esemény már hozzá lett adva!");
-            }
-        }
-
-        private void RemoveFromList(object sender, List<string> list, StackPanel stackPanel)
-        {
-            Button button = sender as Button;
-            list.Remove(button.Content.ToString());
-            int index = stackPanel.Children.IndexOf(button);
-            stackPanel.Children.RemoveAt(index); // Remove the button
-            stackPanel.Children.RemoveAt(index); // Remove the separator
         }
 
         private void InsertSubjects(MySqlConnection conn, int gameId)
@@ -170,37 +167,27 @@ namespace Dusza_Fogadas.pages
             }
         }
 
-        static List<string> GetAktivJatekok()
+        private List<string> GetAktivJatekok()
         {
-            List<string> gameNames = new List<string>();
+            List<string> aktivJatekok = new List<string>();
             string connectionString = "Server=localhost;Database=dusza-fogadas;Uid=root;Pwd=;";
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                try
+                conn.Open();
+                string query = "SELECT game_name FROM games WHERE is_closed = 0;";
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
-                    conn.Open();
-                    string query = "SELECT game_name FROM games WHERE is_closed = 0";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                string gameName = reader.GetString("game_name");
-                                gameNames.Add(gameName);
-                            }
+                            aktivJatekok.Add(reader.GetString(0));
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error: {ex.Message}");
-                }
             }
-
-            return gameNames;
+            return aktivJatekok;
         }
     }
 }

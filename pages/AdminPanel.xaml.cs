@@ -51,23 +51,82 @@ namespace Dusza_Fogadas
             using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
             {
                 connection.Open();
-                // Updated query to exclude closed games
-                string query = "SELECT g.id, g.game_name, g.start_date FROM games g WHERE g.is_closed = 0";
+                string query = "SELECT id, game_name, start_date FROM games WHERE is_closed = 0";
                 using (var command = new MySqlCommand(query, connection))
                 using (var reader = command.ExecuteReader())
                 {
                     Games.Clear();
                     while (reader.Read())
                     {
-                        Games.Add(new Game
+                        var game = new Game
                         {
                             Id = reader.GetInt32("id"),
                             GameName = reader.GetString("game_name"),
-                            StartDate = reader.GetDateTime("start_date")
-                        });
+                            StartDate = reader.GetDateTime("start_date"),
+                            Subjects = LoadSubjectsForGame(reader.GetInt32("id")),
+                            Events = LoadEventsForGame(reader.GetInt32("id"))
+                        };
+
+                        Games.Add(game);
                     }
                 }
             }
+        }
+
+        private ObservableCollection<Subject> LoadSubjectsForGame(int gameId)
+        {
+            var subjects = new ObservableCollection<Subject>();
+
+            using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
+            {
+                connection.Open();
+                string subjectsQuery = "SELECT id, name FROM subjects WHERE game_id = @gameId";
+                using (var command = new MySqlCommand(subjectsQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@gameId", gameId);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            subjects.Add(new Subject
+                            {
+                                Id = reader.GetInt32("id"),
+                                Name = reader.GetString("name")
+                            });
+                        }
+                    }
+                }
+            }
+
+            return subjects;
+        }
+
+        private ObservableCollection<Event> LoadEventsForGame(int gameId)
+        {
+            var events = new ObservableCollection<Event>();
+
+            using (var connection = new MySqlConnection(UserSession.Instance.ConnectionString))
+            {
+                connection.Open();
+                string eventsQuery = "SELECT id, description FROM events WHERE game_id = @gameId";
+                using (var command = new MySqlCommand(eventsQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@gameId", gameId);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            events.Add(new Event
+                            {
+                                Id = reader.GetInt32("id"),
+                                Description = reader.GetString("description")
+                            });
+                        }
+                    }
+                }
+            }
+
+            return events;
         }
 
         private void UsersListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -141,21 +200,6 @@ namespace Dusza_Fogadas
             }
         }
 
-        private void DeleteAssociatedRecords(int gameId, MySqlConnection connection)
-        {
-            string[] tables = { "bets", "results", "events", "subjects" };
-
-            foreach (var table in tables)
-            {
-                string query = $"DELETE FROM {table} WHERE game_id = @gameId";
-                using (var command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@gameId", gameId);
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
         private void DeleteGame(int gameId, MySqlConnection connection)
         {
             string query = "DELETE FROM games WHERE id = @gameId";
@@ -163,6 +207,68 @@ namespace Dusza_Fogadas
             {
                 command.Parameters.AddWithValue("@gameId", gameId);
                 command.ExecuteNonQuery();
+            }
+        }
+        private void DeleteAssociatedRecords(int gameId, MySqlConnection connection)
+        {
+            // Return bets to users before deleting the records
+            ReturnBetsToUsers(gameId, connection);
+
+            // Delete bets first
+            string deleteBetsQuery = "DELETE FROM bets WHERE game_id = @gameId";
+            using (var command = new MySqlCommand(deleteBetsQuery, connection))
+            {
+                command.Parameters.AddWithValue("@gameId", gameId);
+                command.ExecuteNonQuery();
+            }
+
+            // Then delete events
+            string deleteEventsQuery = "DELETE FROM events WHERE game_id = @gameId";
+            using (var command = new MySqlCommand(deleteEventsQuery, connection))
+            {
+                command.Parameters.AddWithValue("@gameId", gameId);
+                command.ExecuteNonQuery();
+            }
+
+            // Then delete results
+            string deleteResultsQuery = "DELETE FROM results WHERE game_id = @gameId";
+            using (var command = new MySqlCommand(deleteResultsQuery, connection))
+            {
+                command.Parameters.AddWithValue("@gameId", gameId);
+                command.ExecuteNonQuery();
+            }
+
+            // Finally delete subjects
+            string deleteSubjectsQuery = "DELETE FROM subjects WHERE game_id = @gameId";
+            using (var command = new MySqlCommand(deleteSubjectsQuery, connection))
+            {
+                command.Parameters.AddWithValue("@gameId", gameId);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private void ReturnBetsToUsers(int gameId, MySqlConnection connection)
+        {
+            string query = "SELECT user_id, bet_amount FROM bets WHERE game_id = @gameId";
+            List<(int userId, double amount)> bets = new List<(int, double)>();
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@gameId", gameId);
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int userId = reader.GetInt32("user_id");
+                        double amount = reader.GetDouble("bet_amount");
+                        bets.Add((userId, amount));
+                    }
+                }
+            }
+
+            foreach (var bet in bets)
+            {
+                ReturnBetToUser(bet.userId, bet.amount, connection);
             }
         }
 

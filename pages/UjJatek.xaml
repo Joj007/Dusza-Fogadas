@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:Dusza_Fogadas.pages"
         mc:Ignorable="d"
         Title="UjJatek" Height="700" Width="600" WindowStyle="None" WindowState="Maximized">
-        <Window.Resources>
-        <Style x:Key = "ListItem" TargetType = "Button">
+
+    <Window.Resources>
+        <Style x:Key="ListItem" TargetType="Button">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontFamily" Value="Lucida Console"/>
             <Setter Property="Foreground" Value="White"/>
-
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -23,7 +23,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="Gold"/>
@@ -52,7 +51,6 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="Gold"/>
             <Setter Property="Background" Value="Black"/>
-
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
@@ -60,11 +58,9 @@
                             <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
                         <ControlTemplate.Triggers>
-
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="BorderBrush" TargetName="bg" Value="GoldenRod"/>
                                 <Setter Property="BorderThickness" TargetName="bg" Value="2"/>
-                                <Setter Property="Background" Value="Black"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
                                 <Setter Property="BorderBrush" TargetName="bg" Value="DarkGoldenRod"/>
@@ -72,7 +68,6 @@
                                 <Setter Property="Background" TargetName="bg" Value="Gold"/>
                                 <Setter Property="Foreground" Value="Black"/>
                             </Trigger>
-
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -94,7 +89,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="Gold"/>
@@ -118,87 +112,78 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
+    </Window.Resources>
 
-        </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="../Images/Bbg2.jpg"></ImageBrush>
+        <ImageBrush ImageSource="../Images/Bbg2.jpg"/>
     </Window.Background>
-    <!--bgBee.png-->
-
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Style = "{StaticResource InputField}" Grid.Column="0" Grid.Row="2">
-
-            <Label Style = "{StaticResource Label}">Ki a szervező? :</Label>
-            <TextBox MaxLength="12" Style = "{StaticResource InputMezo}" x:Name="tbSzervezo"></TextBox>
+        <StackPanel Style="{StaticResource InputField}" Grid.Column="0" Grid.Row="2">
+            <Label Style="{StaticResource Label}">Ki a szervező? :</Label>
+            <TextBox MaxLength="20" Style="{StaticResource InputMezo}" x:Name="tbSzervezo"/>
         </StackPanel>
 
-        <StackPanel Style = "{StaticResource InputField}" Grid.Column="1" Grid.Row="2">
-            <Label Style = "{StaticResource Label}" Grid.Row="1">Mi a játék megnevezése? :</Label>
-            <TextBox MaxLength="12" Style = "{StaticResource InputMezo}" x:Name="tbNeve"></TextBox>
+        <StackPanel Style="{StaticResource InputField}" Grid.Column="1" Grid.Row="2">
+            <Label Style="{StaticResource Label}">Mi a játék megnevezése? :</Label>
+            <TextBox MaxLength="60" Style="{StaticResource InputMezo}" x:Name="tbNeve"/>
         </StackPanel>
 
-        <StackPanel Style = "{StaticResource InputField}" Grid.Row="3" Grid.Column="0">
-            <Label Style = "{StaticResource Label}" Grid.Row="2">Kik az alanyok? :</Label>
-            <TextBox MaxLength="16" Style = "{StaticResource InputMezo}" x:Name="tbAlany"></TextBox>
-            <Button Style = "{StaticResource UploadButton}" x:Name="btnFelveszAlany" Click="btnFelveszAlany_Click">
+        <StackPanel Style="{StaticResource InputField}" Grid.Row="3" Grid.Column="0">
+            <Label Style="{StaticResource Label}">Kik az alanyok? :</Label>
+            <TextBox MaxLength="24" Style="{StaticResource InputMezo}" x:Name="tbAlany"/>
+            <Button Style="{StaticResource UploadButton}" x:Name="btnFelveszAlany" Click="btnFelveszAlany_Click">
                 <Run TextDecorations="Underline">Felvesz</Run>
             </Button>
         </StackPanel>
 
-        <StackPanel Style = "{StaticResource InputField}" Grid.Row="3" Grid.Column="1">
-            <Label Style = "{StaticResource Label}" Grid.Row="3">Mik az események? :</Label>
-            <TextBox MaxLength="24" Style = "{StaticResource InputMezo}" x:Name="tbEsemeny"></TextBox>
-            <Button Style = "{StaticResource UploadButton}" x:Name="btnFelveszEsemeny" Click="btnFelveszEsemeny_Click">
+        <StackPanel Style="{StaticResource InputField}" Grid.Row="3" Grid.Column="1">
+            <Label Style="{StaticResource Label}">Mik az események? :</Label>
+            <TextBox MaxLength="48" Style="{StaticResource InputMezo}" x:Name="tbEsemeny"/>
+            <Button Style="{StaticResource UploadButton}" x:Name="btnFelveszEsemeny" Click="btnFelveszEsemeny_Click">
                 <Run TextDecorations="Underline">Felvesz</Run>
             </Button>
         </StackPanel>
 
         <Border BorderBrush="White" BorderThickness="3" Grid.RowSpan="3" Grid.Column="2">
-            <ScrollViewer Background="Goldenrod" Foreground="Gold" BorderBrush="Gold" VerticalScrollBarVisibility="Auto">
-                <StackPanel Style = "{StaticResource List}" Grid.RowSpan="3" Grid.Column="2" x:Name="spAlanyok">
+            <ScrollViewer Background="Goldenrod" Foreground="Gold" VerticalScrollBarVisibility="Auto">
+                <StackPanel Style="{StaticResource List}" x:Name="spAlanyok">
                     <StackPanel.Background>
-                        <ImageBrush ImageSource="../Images/bg.jpg" TileMode="None" Stretch="Fill">
-                        </ImageBrush>
+                        <ImageBrush ImageSource="../Images/bg.jpg" TileMode="None" Stretch="Fill"/>
                     </StackPanel.Background>
-
-
                 </StackPanel>
             </ScrollViewer>
         </Border>
 
-
-        <Border BorderBrush="White" BorderThickness="3" Grid.RowSpan="3" Grid.Column="2" Grid.Row="3" >
+        <Border BorderBrush="White" BorderThickness="3" Grid.RowSpan="3" Grid.Column="2" Grid.Row="3">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel Style = "{StaticResource List}" Grid.RowSpan="3" Grid.Column="2" Grid.Row="3" x:Name="spEsemenyek">
+                <StackPanel Style="{StaticResource List}" x:Name="spEsemenyek">
                     <StackPanel.Background>
-                        <ImageBrush ImageSource="../Images/bg.jpg" TileMode="None" Stretch="Fill">
-                        </ImageBrush>
+                        <ImageBrush ImageSource="../Images/bg.jpg" TileMode="None" Stretch="Fill"/>
                     </StackPanel.Background>
                 </StackPanel>
             </ScrollViewer>
         </Border>
 
-
-        <Button Style="{StaticResource UploadButton}" x:Name="btnMegse" Grid.Row="6" Width="150px" Height="40px" HorizontalAlignment="Left" Margin="10px" Click="btnMegse_Click">
+        <Button Style="{StaticResource UploadButton}" x:Name="btnMegse" Grid.Row="6" Width="150" Height="40" HorizontalAlignment="Left" Margin="10" Click="btnMegse_Click">
             <Run TextDecorations="Underline">Mégse</Run>
         </Button>
-        <Button Style="{StaticResource UploadButton}" x:Name="btnLetrehoz" Grid.ColumnSpan="3" Grid.Row="6" Width="350px" Height="40px" HorizontalAlignment="Center" Margin="10px" Click="btnLetrehoz_Click">
+        <Button Style="{StaticResource UploadButton}" x:Name="btnLetrehoz" Grid.ColumnSpan="3" Grid.Row="6" Width="350" Height="40" HorizontalAlignment="Center" Margin="10" Click="btnLetrehoz_Click">
             <Run TextDecorations="Underline">Létrehoz</Run>
         </Button>
     </Grid>

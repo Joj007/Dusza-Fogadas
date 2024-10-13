@@ -116,20 +116,6 @@
                         </Setter>
                     </Style>
                 </TabControl.Resources>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 <!-- Users Tab -->
                 <TabItem BorderThickness="0" Header="Felhasználók">
                     <StackPanel Margin="20">
@@ -144,7 +130,7 @@
                 <!-- Games Tab -->
                 <TabItem Header="Játékok">
                     <StackPanel Margin="20">
-                        <ListBox Name="GamesListBox" SelectionChanged="GamesListBox_SelectionChanged"/>
+                        <ListBox Name="GamesListBox" SelectionChanged="GamesListBox_SelectionChanged" FontSize="12"/>
                         <Button Content="Törlés" Click="DeleteGameButton_Click" HorizontalAlignment="Center" Margin="10,20,10,0"/>
                     </StackPanel>
                 </TabItem>
