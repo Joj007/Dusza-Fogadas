@@ -1,3 +1,9 @@
+-- Create the database if it doesn't exist
+CREATE DATABASE IF NOT EXISTS `dusza-fogadas` CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
+
+-- Use the newly created database
+USE `dusza-fogadas`;
+
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
