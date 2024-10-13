@@ -10,6 +10,8 @@ Az adatbázis működéséhez **XAMPP** szükséges. A XAMPP alkalmazásán bel�
    - A `dusza-fogadas-inserts.sql` fájl egy adatokat tartalmazó adatbázist importál.
 3. A fájl kiválasztása után kattints az oldal alján található *Importálás* gombra. Ezzel az adatbázis létrejön.
 
+Az adatbázis felépítése megtalálható az `Images` mappában `adatbázis.png` néven.
+
 ## Program
 
 A repository mappájában található `Dusza-Fogadas.sln` fájlt futtatva megnyílik a **Visual Studio**. Az alkalmazás futtatásához használd a **Ctrl + F5** billentyűkombinációt.
