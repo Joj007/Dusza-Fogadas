@@ -4,7 +4,6 @@
 - látja a saját összegét
 - nyílt játékok böngészése
 - fogadás nyílt játékokra (1 alany-esemény párosra)
-- *múltbéli fogadásainak áttekintése*
 
 ## Szervező
 - játék létrehozása
@@ -12,12 +11,5 @@
 
 ## Admin
 - Játékok törlése
-- Felhasználók törlése
+- Felhasználók atkív állapotának változtatása
 
-
-
-
-
-TODO admin kör
-     kijelentkezés
-     balance és felhasználó  folytonos mutatása
