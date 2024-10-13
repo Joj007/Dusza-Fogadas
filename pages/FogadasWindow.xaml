@@ -95,7 +95,8 @@
             <ListBox Padding="0 15 0 0" Background="Transparent" BorderThickness="0 0 1 0" x:Name="GamesListBox" 
                      ItemsSource="{Binding Games}" 
                      SelectedItem="{Binding SelectedGame}" 
-                     SelectionChanged="GamesListBox_SelectionChanged" 
+                     SelectionChanged="GamesListBox_SelectionChanged"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      Grid.Column="0">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
