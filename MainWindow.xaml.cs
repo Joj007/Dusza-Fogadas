@@ -13,25 +13,35 @@ namespace Dusza_Fogadas
         private void btnLetrehozas_Click(object sender, RoutedEventArgs e)
         {
             UjJatek ujJatek = new UjJatek();
-            ujJatek.Show();
+            ujJatek.ShowDialog();
         }
 
         private void btnLeadas_Click(object sender, RoutedEventArgs e)
         {
-            FogadasWindow asd = new FogadasWindow();
-            asd.Show();
+            openLeadas();
+        }
+
+        private void openLeadas()
+        {
+            lblEgyenleg.Content = "Egyenleg: " + UserSession.Instance.Balance + "$";
+            FogadasWindow fogadas = new FogadasWindow();
+            bool? result = fogadas.ShowDialog();
+            if (result == true)
+            {
+                openLeadas();
+            }
         }
 
         private void btnLezaras_Click(object sender, RoutedEventArgs e)
         {
-            Lezaras uj = new Lezaras();
-            uj.Show();
+            Lezaras lezaras = new Lezaras();
+            lezaras.ShowDialog();
         }
 
         private void btnAdmin_Click(object sender, RoutedEventArgs e)
         {
             AdminPanel adminPanel = new AdminPanel();
-            adminPanel.Show();
+            adminPanel.ShowDialog();
         }
 
         private void btnKilepes_Click(object sender, RoutedEventArgs e)
@@ -42,8 +52,8 @@ namespace Dusza_Fogadas
         private void Bejelentkezes_Click(object sender, RoutedEventArgs e)
         {
 
-            Bejelentkezes wasd = new Bejelentkezes();
-            bool? result = wasd.ShowDialog();
+            Bejelentkezes bejelentkezes = new Bejelentkezes();
+            bool? result = bejelentkezes.ShowDialog();
 
             if (result == true)
             {
